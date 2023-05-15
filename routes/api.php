@@ -15,17 +15,3 @@ use App\Http\Controllers\SolutionController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::prefix("/solucao")->group(function () {
-    Route::controller(SolutionController::class)->group(function () {
-        Route::post("/cadastrar", "store");
-        Route::get("/solucoes", "index");
-    });  
-});
-
-Route::prefix("/categoria")->group(function () {
-    Route::controller(CategorieController::class)->group(function () {
-        Route::post("/cadastrar", "store");
-        Route::get("/categorias", "index");
-    });    
-});
