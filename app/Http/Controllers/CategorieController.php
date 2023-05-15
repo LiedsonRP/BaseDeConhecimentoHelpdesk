@@ -23,8 +23,9 @@ class CategorieController extends Controller
             try {
                 $categorie = new Categorie(["name" => $request->input("name")]);
                 $categorie->save();
+                return response("Categoria cadastrada!", 201);
             } catch (QueryException $ex) {
-
+                return response("A categoria já está cadastrada!", 417);
             }            
         } else{
             return response("não foi possível cadastrar", 417);

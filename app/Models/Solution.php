@@ -11,7 +11,7 @@ class Solution extends Model
 
     protected $table = "solutions";
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = ["title", "SolutionText"];
 

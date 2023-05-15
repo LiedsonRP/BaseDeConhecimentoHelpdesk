@@ -12,7 +12,7 @@ class SolutionController extends Controller
 
     public function index()
     {
-        return Solution::all();
+        return Solution::with("categories")->get();
     }
 
     public function store(Request $request)

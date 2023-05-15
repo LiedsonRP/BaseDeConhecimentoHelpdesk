@@ -10,12 +10,10 @@ class Categorie extends Model
     use HasFactory;
 
     protected $table = "categories";
-
     public $timestamps = false;
-
     protected $fillable = ["name"];
 
-    public function categories()
+    public function solutions()
     {
         return $this->belongsToMany(Solution::class);
     }
