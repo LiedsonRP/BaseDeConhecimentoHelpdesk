@@ -18,6 +18,7 @@ class SolutionController extends Controller
     public function store(Request $request)
     {
         if ($request->filled(["title", "SolutionText", "categories"])){
+            
             DB::beginTransaction();
 
             $solution = new Solution($request->only(["title",  "SolutionText"]));
