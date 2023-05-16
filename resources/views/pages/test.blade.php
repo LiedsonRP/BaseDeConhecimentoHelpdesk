@@ -13,10 +13,30 @@
         <button type="submit">Submit</button>
     </form>
 
-    <form method="post" action="{{ route("cadCategoria") }}">
+    <form method="post" action="{{ route("cadSolucao") }}">
+        @csrf        
+        <input type="text" name="title" />
+        <button type="submit">Submit</button>
+    </form>
+
+    <form method="post" action="{{ route("upload") }}" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="id" value="1"/>        
         <input type="file" name="files[]" multiple/> 
         <button type="submit">Submit</button>
     </form>
+
+    @if (isset($files_url))
+        @foreach ($files_url as $file)                
+            <form method="post" action="{{ route("deleteFile", $id) }}">
+                @csrf                                
+                <input  name="file_name" value={{ (string) $file["file_name"] }} />
+                <input type="text" value={{ $file["file_path"] }} />            
+                <button type="submit">Deletar</button>
+            </form>
+            <br>        
+        @endforeach
+    @endif
+
 </body>
 </html>

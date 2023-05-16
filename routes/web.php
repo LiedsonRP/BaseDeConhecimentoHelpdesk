@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SolutionController;
+use App\Http\Controllers\SolutionStorageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,18 +31,33 @@ Route::prefix("/solucao")->group(function () {
         /**
          * Rota que leva a função de cadastrar uma solução no controller de soluções
          */
-        Route::post("/cadastrar", "store");
+        Route::post("/cadastrar", "store")->name("cadSolucao");
         /**
          * Rota que leva a função de retornar todos as soluções cadastradas no banco de dados
          */
         Route::get("/solucoes", "index");
     });
     /**
-     * Grupo de rotas que permite o acesso e manipulação do storage
+     * Rotas para o controller do storage
      */
-    Route::prefix("storage")->group(function () {
-        
-    });
+    Route::controller(SolutionStorageController::class)->group(function() {
+        /**
+         * Rota de upload de arquivos
+         */
+        Route::post("/upload", "upload")->name("upload");
+        /**
+         * Rota de recuperação dos arquivos associados a solução
+         */
+        Route::get("/files/{id}", "index")->name("getFiles");
+        /**
+         * Rota para deletar um arquivo específico associado a solução
+         */
+        Route::delete("/file/delete/{id}", "delete_file")->name("deleteFile");
+        /**
+         * Rota para deletar o diretório e os arquivos associados
+         */
+        Route::delete("/directory/delete/{id}", "delete_folder")->name("deleteFolder");
+    });            
 });
 
 Route::prefix("/categoria")->group(function () {
