@@ -57,9 +57,16 @@ Route::prefix("/solucao")->group(function () {
          * Rota para deletar o diretório e os arquivos associados
          */
         Route::delete("/directory/delete/{id}", "delete_folder")->name("deleteFolder");
-    });            
+    });  
+    
+    Route::view("/dashboard", "");
+    Route::view("/card-solucao", "");
+
 });
 
+/**
+ * Grupo de rotas das categorias
+ */
 Route::prefix("/categoria")->group(function () {
     Route::controller(CategoryController::class)->group(function () {
         /**
@@ -73,9 +80,4 @@ Route::prefix("/categoria")->group(function () {
     });
 
     Route::view("/form-teste", "pages/test");
-
-    /**
-     * Rota para a página de gerenciamento de categorias [Falta criar a página]
-     */
-    Route::view('gerenciar-categoria', '[viewName]');
 });
