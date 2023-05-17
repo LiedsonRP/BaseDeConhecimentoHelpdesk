@@ -20,7 +20,7 @@ use App\Http\Controllers\SolutionStorageController;
  * Rota para página de login do sistema
  */
 Route::get('/', function () {
-    return view('pages/test');
+    return view('pages/testSolucao');
 });
 
 /**
@@ -33,8 +33,7 @@ Route::prefix("/solucao")->group(function () {
      */
     Route::controller(SolutionController::class)->group(function () {
         /**
-         * Rota que leva a função de cadastrar uma solução no controller de soluções
-         * @todo
+         * Rota que leva a função de cadastrar uma solução no controller de soluções         
          */
         Route::post("/cadastrar", "store")->name("cadSolucao");
         /**
@@ -102,19 +101,16 @@ Route::prefix("/categoria")->group(function () {
      */
     Route::controller(CategoryController::class)->group(function () {
         /**
-         * Rota que salva os dados de uma categoria no banco de dados
-         * @todo
+         * Rota que salva os dados de uma categoria no banco de dados         
          */
         Route::post("/cadastrar", "store")->name("cadCategoria");
         /**
-         * Rota para retorno dos dados de todas as categorias pelo controller
-         * @todo
+         * Rota para retorno dos dados de todas as categorias pelo controller         
          */
         Route::get("/categorias", "index")->name("mostrarCategorias");
         /**
-         * Rota que permite a deleção de uma categoria
-         * @todo
+         * Rota que permite a deleção de uma categoria         
          */
-        Route::delete("/deletar/{id}", "delete")->name("deletarCategoria");
+        Route::get("/deletar/{id}", "delete")->name("deletarCategoria");
     });    
 });
