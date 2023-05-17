@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Category;
-use Illuminate\Database\QueryException;
-
+use Exception;
 
 /**
  * Controller responsável por gerenciar as tags de categoria de solução do sistema
@@ -17,15 +17,12 @@ class CategoryController extends Controller
      * Retorna todas as categorias cadastradas no sistema, retornando-as como 
      * uma resposta em JSON
      * 
-     * @return Response
-     * 
-     * @todo
+     * @return Response     
      */
-    public function index()
+    public function index() : Response
     {
         $categories = Category::all();
-
-        dd(response()->json($categories));
+        return response($categories);
     }
 
     /**
@@ -34,23 +31,32 @@ class CategoryController extends Controller
      * 
      * Ao final irá redirecionar para a rota de retorno das categorias
      * 
-     * @param Request $request     
-     * 
-     * @todo
+     * @param Request $request
+     * @return Response
+     *      
      */
-    public function store(Request $request)
-    {        
+    public function store(Request $request) : Response
+    {
 
         if ($request->filled("name")) {
-            try {
-                $category = new Category(["name" => $request->input("name")]);
-                $category->save();
 
-                return redirect()->route("mostrarCategorias");
-            } catch (QueryException $ex) {                
-                return redirect()->back()->withInput();
+            $category = new Category(["name" => $request->input("name")]);            
+            
+            if($category->check_if_category_exists()) {
+                $category->save();
+                return $this->index();
             }
+
+            return response([
+                "sucess" => false,
+                "message" => "A categoria cadastrada já existe!"
+            ]);                        
         }
+
+        return response([
+            "sucess" => false,
+            "message" => "O nome da categoria deve ser informado!"
+        ]);
     }
 
     /**
@@ -58,11 +64,20 @@ class CategoryController extends Controller
      * de todas as soluções do sistema e retorna as restantes
      * 
      * @param int $id     
-     * 
-     * @todo
+     * @return Response 
      */
-    public function delete($id)
+    public function delete(int $id) : Response
     {
+        try {
+            
+            Category::findOrFail($id)->delete();
+            return $this->index();
 
+        } catch(Exception $ex) {
+            response([
+                "sucess" => false,
+                "message" => "Ocorreu um erro interno interno, tente novamente mais tarde!"
+            ]);
+        }
     }
 }
