@@ -27,7 +27,7 @@ class SolutionController extends Controller
      */
     public function searchSolutions(Request $request)
     {
-        return Solution::with("categories")->get();
+        dd(Solution::paginate(15));
     }
 
     /**

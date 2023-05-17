@@ -46,7 +46,7 @@ Route::prefix("/solucao")->group(function () {
          * Rota que permite a edição do registro de uma categoria
          * @todo
          */        
-        Route::put("/edit", "update")->name("atualizarSolucao");
+        Route::put("/edit", "update")->name("editarSolucao");
         /**
          * Rota que permite deletar uma solução
          * @todo
