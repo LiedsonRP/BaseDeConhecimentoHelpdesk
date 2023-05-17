@@ -39,7 +39,6 @@ class SolutionController extends Controller
      * @param Request $request
      * @return Redirect
      * 
-     * @todo
      */
     public function store(Request $request)
     {
@@ -49,9 +48,29 @@ class SolutionController extends Controller
                 "title" => $request->input(["title"]),
                 "solution_text" => ""
             ]);
+            
+            if (!$solution->check_if_title_already_registered()) {
+                
+                $solution->save();       
 
-            $solution->save();            
+                return view("pages/testShowSolucao", [
+                    "id"=>$solution->id,
+                    "title"=>$solution->title,
+                    "solution_text"=>$solution->solution_text,
+                    "categories" => []
+                ]);
+            } else {
+                return response([
+                    "sucess" => false,
+                    "message" => "O título passado já foi cadastrado!"
+                ]);  
+            }
         }
+
+        return response([
+            "sucess" => false,
+            "message" => "O título da solução deve ser passado!"
+        ]);
     }
 
     /**
