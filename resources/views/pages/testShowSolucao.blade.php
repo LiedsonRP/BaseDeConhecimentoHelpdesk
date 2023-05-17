@@ -7,9 +7,11 @@
     <title>Document</title>
 </head>
 <body>
-    id: {{ $id }} <br>
-    titulo: {{ $title }}<br>
-    Conteúdo: {{ $solution_text }}<br>
-    categorias: {{ var_dump($categories) }}
+    <form method="POST" action={{ route("editarSolucao", {{$id}}) }}>
+        @csrf
+        <input type="text" name="title" value={{ $title }}/>
+        <textarea name="solution_text" value={{$solution_text}}></textarea>
+        <input type="text" name="title" value={{ $title }}/>
+    </form>    
 </body>
 </html>

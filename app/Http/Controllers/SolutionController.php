@@ -86,22 +86,15 @@ class SolutionController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        if ($request->filled(["title", "SolutionText", "categories"])){
+        if ($request->filled(["title", "categories"])){
             
             DB::beginTransaction();
 
-            $solution = new Solution($request->only(["title",  "SolutionText"]));
-            $solution->save();
+            $solution = Solution::find($id);
+            //$solution->update($request->only(["title",  "SolutionText"]));            
+            dd($solution->categories);
 
             $categories = $request->input("categories");
-
-            if (sizeof($categories) > 0) {
-
-                foreach ($categories as $categorie_id) {
-                    $categorie = Category::find($categorie_id);
-                    $solution->categories()->save($categorie);
-                }
-            }
 
             DB::commit();
         }

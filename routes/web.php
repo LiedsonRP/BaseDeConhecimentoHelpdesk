@@ -88,7 +88,7 @@ Route::prefix("/solucao")->group(function () {
      * Rota que leva para a tela de edição da solução
      * @todo
      */
-    Route::view("/card-solucao", "")->name("cardView");
+    Route::view("/card-solucao", "pages/testShowSolucao")->name("cardView");
 
 });
 
