@@ -16,51 +16,80 @@ use App\Http\Controllers\SolutionStorageController;
 |
 */
 
+/**
+ * Rota para página de login do sistema
+ */
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages/test');
 });
 
 /**
  * Grupo de rotas que engloba a manipulação e vizualização de páginas e dados das soluções
  */
 Route::prefix("/solucao")->group(function () {
+
     /**
      * Grupo de rotas que permite acesso as funções do controller de soluções
      */
     Route::controller(SolutionController::class)->group(function () {
         /**
          * Rota que leva a função de cadastrar uma solução no controller de soluções
+         * @todo
          */
         Route::post("/cadastrar", "store")->name("cadSolucao");
         /**
          * Rota que leva a função de retornar todos as soluções cadastradas no banco de dados
+         * @todo
          */
-        Route::get("/solucoes", "index");
+        Route::get("/solucoes", "searchSolutions")->name("mostrarCategorias");
+        /**
+         * Rota que permite a edição do registro de uma categoria
+         * @todo
+         */        
+        Route::put("/edit", "update")->name("atualizarSolucao");
+        /**
+         * Rota que permite deletar uma solução
+         * @todo
+         */
+        Route::delete("/delete/{id}", "delete")->name("deletarSolucao");
     });
+
     /**
      * Rotas para o controller do storage
      */
     Route::controller(SolutionStorageController::class)->group(function() {
         /**
          * Rota de upload de arquivos
+         * @todo
          */
         Route::post("/upload", "upload")->name("upload");
         /**
          * Rota de recuperação dos arquivos associados a solução
+         * @todo
          */
         Route::get("/files/{id}", "index")->name("getFiles");
         /**
          * Rota para deletar um arquivo específico associado a solução
+         * @todo
          */
         Route::delete("/file/delete/{id}", "delete_file")->name("deleteFile");
         /**
          * Rota para deletar o diretório e os arquivos associados
+         * @todo
          */
         Route::delete("/directory/delete/{id}", "delete_folder")->name("deleteFolder");
     });  
-    
-    Route::view("/dashboard", "");
-    Route::view("/card-solucao", "");
+
+    /**
+     * Rota que leva para a página principal da aplicação
+     * @todo
+     */
+    Route::view("/dashboard", "")->name("dashboard");
+    /**
+     * Rota que leva para a tela de edição da solução
+     * @todo
+     */
+    Route::view("/card-solucao", "")->name("cardView");
 
 });
 
@@ -68,16 +97,24 @@ Route::prefix("/solucao")->group(function () {
  * Grupo de rotas das categorias
  */
 Route::prefix("/categoria")->group(function () {
+    /**
+     * Rotas para as funções de controller das categorias
+     */
     Route::controller(CategoryController::class)->group(function () {
         /**
          * Rota que salva os dados de uma categoria no banco de dados
+         * @todo
          */
         Route::post("/cadastrar", "store")->name("cadCategoria");
         /**
          * Rota para retorno dos dados de todas as categorias pelo controller
+         * @todo
          */
         Route::get("/categorias", "index")->name("mostrarCategorias");
-    });
-
-    Route::view("/form-teste", "pages/test");
+        /**
+         * Rota que permite a deleção de uma categoria
+         * @todo
+         */
+        Route::delete("/deletar/{id}", "delete")->name("deletarCategoria");
+    });    
 });
