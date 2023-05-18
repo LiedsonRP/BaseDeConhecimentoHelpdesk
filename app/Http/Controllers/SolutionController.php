@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Solution;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -37,33 +37,33 @@ class SolutionController extends Controller
      * é retornado para a página principal do sistema junto de uma mensagem de erro.
      * 
      * @param Request $request
-     * @return Redirect
+     * @return Response
      * 
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
-        if ($request->filled(["title"])){            
+        if ($request->filled(["title"])) {
 
             $solution = new Solution([
                 "title" => $request->input(["title"]),
                 "solution_text" => ""
             ]);
-            
-            if (!$solution->check_if_title_already_registered()) {
-                
-                $solution->save();       
 
-                return view("pages/testShowSolucao", [
-                    "id"=>$solution->id,
-                    "title"=>$solution->title,
-                    "solution_text"=>$solution->solution_text,
+            if (!$solution->check_if_title_already_registered()) {
+
+                $solution->save();
+
+                return response()->view("pages/testShowSolucao", [
+                    "id" => $solution->id,
+                    "title" => $solution->title,
+                    "solution_text" => $solution->solution_text,
                     "categories" => []
                 ]);
             } else {
                 return response([
                     "sucess" => false,
                     "message" => "O título passado já foi cadastrado!"
-                ]);  
+                ]);
             }
         }
 
@@ -86,18 +86,20 @@ class SolutionController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        if ($request->filled(["title", "categories"])){
-            
+
             DB::beginTransaction();
 
             $solution = Solution::find($id);
-            //$solution->update($request->only(["title",  "SolutionText"]));            
-            dd($solution->categories);
+            //$solution->update($request->only(["title",  "SolutionText"]));
 
-            $categories = $request->input("categories");
+            //manipulando as categorias
 
-            DB::commit();
-        }
+            $requestCategories = collect($request->input("categories"));
+            $id_collection = $solution->categories;
+
+            dd($id_collection->diff($requestCategories));
+
+            DB::commit();        
     }
 
     /**
@@ -111,6 +113,5 @@ class SolutionController extends Controller
      */
     public function delete(int $id)
     {
-
     }
 }
