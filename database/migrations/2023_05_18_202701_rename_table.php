@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table("solutions",function (Blueprint $table){
-            $table->string("folder_path")->nullable(true)->change();
-        });
+        Schema::rename("categorie_solution", "category_solution");        
     }
 
     /**
@@ -21,8 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table("solutions",function (Blueprint $table){
-            $table->string("folder_path")->nullable(false)->change();
-        });
+        Schema::rename("category_solution", "categorie_solution");
     }
 };
