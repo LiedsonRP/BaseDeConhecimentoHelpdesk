@@ -20,7 +20,7 @@ use App\Http\Controllers\SolutionStorageController;
  * Rota para página de login do sistema
  */
 Route::get('/', function () {
-    return view('pages/testSolucao');
+    return view('pages/dashboard');
 });
 
 /**
@@ -83,12 +83,12 @@ Route::prefix("/solucao")->group(function () {
      * Rota que leva para a página principal da aplicação
      * @todo
      */
-    Route::view("/dashboard", "")->name("dashboard");
+    Route::view("/dashboard", "pages/dashboard")->name("dashboard");
     /**
      * Rota que leva para a tela de edição da solução
      * @todo
      */
-    Route::view("/card-solucao", "pages/testShowSolucao")->name("cardView");
+    Route::view("/card-solucao", "pages/edit_solution")->name("cardView");
 
 });
 

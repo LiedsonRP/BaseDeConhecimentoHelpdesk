@@ -11,7 +11,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href={{ asset("styles/dashboard.css") }}>
 </head>
 <body>
     <header>
@@ -141,71 +141,14 @@
       <section>
           <!-- Content com os conteudos -->
             <div class="card_container card w-100 mb-3">
-                <div class="card card_content">
-                    <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
-                    </div>
-                </div>
-                <div class="card card_content">
+              <div class="card card_content">
                   <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
+                  <h5 class="card-title">Título</h5>
                   <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                  <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
+                  <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
                   </div>
               </div>
-              <div class="card card_content">
-                <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-              <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-              <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
-              </div>
-          </div>
-          <div class="card card_content">
-            <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-            <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
-            </div>
-        </div>
-        <div class="card card_content">
-          <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-          <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
-          </div>
-      </div>
-              <div class="card card_content">
-                <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-              <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-              <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
-              </div>
-          </div>
-              <div class="card card_content">
-                <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                <a href="jodit.html" class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-      
-            </div>
+            </div>          
           <!-- Paginacao -->
           
           <div class="paginacao">
