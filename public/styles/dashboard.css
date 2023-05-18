@@ -10,7 +10,6 @@ header{
     padding: 0;
     display: flex;
     flex-direction: row;
-    position: sticky;
  }
 nav.navbar1{
 }
@@ -19,6 +18,17 @@ nav.navbar1{
     padding: 0;
 }
 
+.create_task_button{
+    width: 350px;
+    left: 75%;
+    border-radius: 50%;
+}
+.ul-navbar-nav-create-button{
+
+}
+.li-navbar-nav-create-button{
+    display: flex;
+}
 .paginacao{
     display: flex;
     padding-top: 20px;
@@ -49,7 +59,6 @@ section{
 .button-edit{
     width: 40%;
     height: 50px;
-    float: right;
 }
 
 @media screen and (max-width: 700px){
@@ -60,5 +69,11 @@ section{
     .card_content{
         width: 100%;
 
+    }
+    .button-edit{
+        float: right;
+    }
+    .create_task_button{
+        left: 3%;
     }
 }

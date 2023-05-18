@@ -16,7 +16,7 @@
 <body>
     <header>
       <!-- Navbar do site -->
-      <menu>
+      <menu class="fixed-top w-100">
         <div class="navbar1 w-100">
           <nav class="navbar navbar1 navbar-expand-lg bg-body-tertiary">
               <div class="container-fluid">
@@ -65,12 +65,12 @@
               </div>
             </nav>
         </div>
-          <!-- SideBar do Site -->
-          <div class="navbar2 bg-body-tertiary">
-            <nav class="navbar navbar2  fixed-top">
-              <div class="container-fluid">
-                <a class="navbar-brand" href="#"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <!-- SideBar do Site -->
+        <div class="navbar2 bg-body-tertiary">
+          <nav class="navbar navbar2  fixed-top">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#"></a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
@@ -81,9 +81,10 @@
                   <!-- SideBar -->
                   <div class="offcanvas-body">
                       <!-- Search -->
+                      <h6>Pesquisar por:</h6>
+                      <label for="ititulo-search">Tiítulo: </label>
                       <form class="d-flex mt-3" role="search">
-                        
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control me-2" id="ititulo-search" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -93,26 +94,23 @@
                       </form>
       
                       <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                          <!-- DropBox -->
-                        <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Categorias
-                          </a>
-                          <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Categoria 1</a></li>
-                            <li><a class="dropdown-item" href="#">Categoria 2</a></li>
-                            <li>
-                              <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Categoria 3</a></li>
-                          </ul>
-                        </li>
+                        <label for="icategoria-search">Categoria: </label>
+                        <form >
+                            <!-- DropBox -->
+                            <select id="icategoria-search" class="form-select btn-terciary" aria-label="Default select example">
+                              <option selected>Categorias</option>
+                              <option value="1">Categoria 1</option>
+                              <option value="2">Categoria 2</option>
+                              <option value="3">Categoria 3</option>
+                            </select>
+                        </form>
+                        <hr>
                       <li class="nav-item" style="margin-top: 20px;">
                               <p>
                                 <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                   Adicionar Categoria
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-  
+                                    
                                     <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                                   </svg>
                                 </a>
@@ -129,7 +127,7 @@
                                   </form>
                                 </div>
                               </div>
-                      </li>
+                            </li>
                     </ul>
                   </div>
                 </div>
@@ -138,6 +136,33 @@
         </div>
       </menu>
     </header>
+    <!-- Adicionar tarefa -->
+    <div class="fixed-top create_task_button">
+      <ul class="navbar-nav ul-navbar-nav-create-button justify-content-end flex-grow-1 pe-3">
+        <li class="nav-item li-navbar-nav-create-button" style="margin-top: 30%;">
+          <p>
+            <a class="btn btn-success" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+              </svg>
+            </a>
+          </p>
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              <form>
+                <div class="mb-3">
+                  <label for="icategoria" class="form-label">Título tarefa: </label>
+                  <input type="text" class="form-control" id="icategoria" aria-describedby="emailHelp">
+                  <div class="form-text">Insira o título da sua tarefa</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Criar Tarefa</button>
+              </form>
+            </div>
+          </div>
+          </li>
+      </ul>
+    </div>
       <section>
           <!-- Content com os conteudos -->
             <div class="card_container card w-100 mb-3">
@@ -148,7 +173,63 @@
                   <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
                   </div>
               </div>
-            </div>          
+              <div class="card card_content">
+                <div class="card-body">
+                  <h5 class="card-title">Título</h5>
+                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
+                <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
+                </div>
+            </div>
+            <div class="card card_content">
+                  <div class="card-body">
+                    <h5 class="card-title">Título</h5>
+                  <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
+                  <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
+                  </div>
+              </div>
+              <div class="card card_content">
+                <div class="card-body">
+                  <h5 class="card-title">Título</h5>
+                  <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
+                  <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
+                </div>
+              </div>
+            <div class="card card_content">
+              <div class="card-body">
+              <h5 class="card-title">Título</h5>
+              <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
+              <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
+              </div>
+            </div>
+            <div class="card card_content">
+              <div class="card-body">
+                <h5 class="card-title">Título</h5>
+                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
+                <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
+              </div>
+            </div>
+            <div class="card card_content">
+              <div class="card-body">
+              <h5 class="card-title">Título</h5>
+              <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
+              <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
+            </div>
+          </div>
+          <div class="card card_content">
+            <div class="card-body">
+            <h5 class="card-title">Título</h5>
+            <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
+            <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
+            </div>
+        </div>
+        <div class="card card_content">
+          <div class="card-body">
+            <h5 class="card-title">Título</h5>
+            <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio a fugit quis praesentium, odio veritatis earum ab hic?</p>
+            <a href={{ route("cardView") }} class="btn btn-primary button-edit" target="_self">Editar</a>
+          </div>
+        </div>
+      </div>          
           <!-- Paginacao -->
           
           <div class="paginacao">
