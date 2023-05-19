@@ -37,5 +37,18 @@ class Category extends Model
     {
         return Category::where("name", "LIKE", $this->name)->get()->isEmpty();        
     }
+
+    /**
+     * Verifica se a respctiva instancia de categória é igual a uma
+     * outra, levando em conta que serão considerados iguais caso seu
+     * nome ou id sejam iguais.
+     * 
+     * @param Category $category Categoria a ser comparada
+     * @return bool
+     */
+    public function equals(Category $category) : bool
+    {
+        return $category->id == $this->id && $category->name == $this->name;
+    }
     
 }
