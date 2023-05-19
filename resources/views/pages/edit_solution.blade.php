@@ -42,7 +42,7 @@
                     <input type="file" class="form-control " id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
                     <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Adicionar</button>
                   </div>
-                  <button type="button" class="btn btn-success btn-adicionar">Adicionar</button>
+                  <button type="button" class="btn btn-success btn-adicionar">Enviar</button>
                 </div>
             </form>
         </div>

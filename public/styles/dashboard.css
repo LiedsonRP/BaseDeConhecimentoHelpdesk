@@ -20,7 +20,8 @@ nav.navbar1{
 
 .create_task_button{
     width: 350px;
-    left: 75%;
+    left: 95%;
+    top: 75%;
     border-radius: 50%;
 }
 .ul-navbar-nav-create-button{
