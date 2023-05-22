@@ -46,28 +46,7 @@ class Solution extends Model implements CategoryManager
     public function categories() : BelongsToMany
     {
         return $this->belongsToMany(Category::class);
-    }
-    /**
-     * Verifica e retorna a quantidade de categorias associadas a respectiva solução;
-     * 
-     * @return int
-     */
-    public function getNumberOfCategories()
-    {
-        return $this->categories()->get()->count();
-    }
-
-    /**
-     * Verifica se é possível remover uma categória da associação, respeitando o 
-     * número mínimo de categorias que devem estar associadas.
-     * 
-     * @return bool
-     */
-    private function can_remove_a_category() : bool
-    {
-        $quant_categories_associated = $this->categories()->get()->count();
-        return $quant_categories_associated - 1 >= self::MIN_ASSOCIATED_CATEGORY_NUMBER;        
-    }
+    }   
 
     /**
      * 
@@ -83,26 +62,19 @@ class Solution extends Model implements CategoryManager
      * exceção caso isto não ocorra.
      * 
      * @throws MinCategoryNumberNotRespectedException
-     * @throws CategoryNotAssociatedException
-     * @todo
+     * @throws CategoryNotAssociatedException    
      */
-    public function removeCategory(Category $comparableCategory) : void
+    public function removeCategory(Category $category) : void
     {
-        if ($this->can_remove_a_category()) {
+        if (!$this->can_remove_a_category()) {
             throw new MinCategoryNumberNotRespectedException("A solução não terá o número mínimo de categorias associadas após o processo!");
-        }
-        
-        $categories_associated = $this->listCategories();    
+        }        
 
-        $is_categories_associated = $categories_associated->contains(function(Category $category_associated) use ($comparableCategory) {
-            return $category_associated->equals($comparableCategory);
-        });
-
-        if ($is_categories_associated) {
-            $this->categories()->toggle($comparableCategory->id);
-        } else {
+        if (!$this->checkIfCategoryExist($category)) {
             throw new CategoryNotAssociatedException("A categoria passada não possui uma associação com a solução!");
         }
+        
+        $this->categories()->toggle($category->id);
     }    
     
     /**
@@ -128,6 +100,18 @@ class Solution extends Model implements CategoryManager
         });
 
         return $exists;
+    }
+
+     /**
+     * Verifica se é possível remover uma categória da associação, respeitando o 
+     * número mínimo de categorias que devem estar associadas.
+     * 
+     * @return bool
+     */
+    private function can_remove_a_category() : bool
+    {
+        $quant_categories_associated = $this->categories()->get()->count();        
+        return ($quant_categories_associated - 1) >= self::MIN_ASSOCIATED_CATEGORY_NUMBER;        
     }
 
 }
