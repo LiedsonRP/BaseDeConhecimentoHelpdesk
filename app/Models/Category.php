@@ -8,6 +8,7 @@ use App\Contracts\ComparableCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 use App\Exceptions\MinCategoryNumberNotRespectedException;
 use App\Exceptions\CategoryAlreadyExistException;
@@ -36,7 +37,7 @@ class Category extends Model implements CategoryManager, ComparableCategory
     /**
      * Configura o relacionamento de N para N entre categorias e soluções
      */
-    public function solutions()
+    private function solutions()
     {
         return $this->belongsToMany(Solution::class);
     }        
@@ -67,24 +68,23 @@ class Category extends Model implements CategoryManager, ComparableCategory
      * 
      * @param Category $category Categoria que deve ser removida
      * @throws MinCategoryNumberNotRespectedException
-     * @throws ModelNotFoundException
-     * @todo
+     * @throws ModelNotFoundException     
      */
     public function removeCategory(Category $category) : void 
     {        
-        $solutions_associated = $category->solutions()->get();
-        $solutions_have_min_quant_categories = $solutions_associated->every(function (Solution $solution) {
+        if (!$this->checkIfCategoryExist($category)) {
+            throw new ModelNotFoundException("A categoria especificada não está cadastrada na base de dados");
+        }        
+        
+        DB::transaction(function () use ($category){
+            $solutions_associated = $category->solutions()->get();               
             
-            $new_quant_categories = $solution->getNumberOfCategories() - 1;
-            return $new_quant_categories >= 1;
-
-        });        
-
-        if ($solutions_have_min_quant_categories) {            
-            //$category->solutions()->toggle($solutions_associated->get("id"));
-        } else {
-            throw new MinCategoryNumberNotRespectedException("Uma ou mais soluções não ficaram com o número mínimo de categorias!");
-        }
+            $solutions_associated->each(function (Solution $solution) use ($category) {
+                $solution->removeCategory($category);
+            });
+    
+            $category->delete();
+        });;                
     }
 
     /**
