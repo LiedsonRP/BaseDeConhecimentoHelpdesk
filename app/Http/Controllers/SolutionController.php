@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DuplicateSolutionTitleException;
 use Illuminate\Http\Request;
 use App\Models\Solution;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Controller responsável por gerenciar os registros de soluções no sistema
@@ -28,7 +31,7 @@ class SolutionController extends Controller
      */
     public function searchSolutions(Request $request)
     {
-        dd(Solution::paginate(15));
+        return Solution::with("categories")->paginate(15);
     }
 
     /**
@@ -45,14 +48,14 @@ class SolutionController extends Controller
     {
         if ($request->filled(["title"])) {
 
-            $solution = new Solution([
-                "title" => $request->input(["title"]),
-                "solution_text" => ""
-            ]);
+            try {
 
-            if (!$solution->check_if_title_already_registered()) {
+                $solution = new Solution([
+                    "title" => $request->input(["title"]),
+                    "solution_text" => ""
+                ]);
 
-                $solution->save();
+                $solution->addSolution();
 
                 return response()->view("pages/edit_solution", [
                     "id" => $solution->id,
@@ -60,18 +63,14 @@ class SolutionController extends Controller
                     "solution_text" => $solution->solution_text,
                     "categories" => []
                 ]);
-            } else {
-                return response([
-                    "sucess" => false,
-                    "message" => "O título passado já foi cadastrado!"
-                ]);
+            } catch (DuplicateSolutionTitleException $ex) {
+                return back()->withInput()->withErrors("O título passado já foi usado em outra solução!");
+            } catch (Exception $ex) {
+                return back()->withInput()->withErrors("Ocorreu um erro interno, tente novamente mais tarde!");
             }
         }
 
-        return response([
-            "sucess" => false,
-            "message" => "O título da solução deve ser passado!"
-        ]);
+        return back()->withInput()->withErrors("O título da solução deve ser informado!");
     }
 
     /**
@@ -88,23 +87,25 @@ class SolutionController extends Controller
     public function update(Request $request, int $id)
     {
 
+        try {
             DB::beginTransaction();
 
-            $solution = Solution::find($id);
-            //$solution->update($request->only(["title",  "SolutionText"]));
+            $solution = Solution::findOrFail($id);
+            $requestCategories = $request->input("categories");
 
-            //manipulando as categorias
+            foreach ($requestCategories as $id) {
+                $category = Category::findOrFail($id);
+                $exists = $solution->checkIfCategoryExist($category);
 
-            $requestCategories = $request->input("categories");        
-            foreach ($requestCategories as $key => $value) {
-                //$categorie = Category::findOrFail($value);
-                $solution->categories();
-            }            
+                if (!$exists) {
+                    $solution->addCategory($category);
+                }
+            }
 
-            //dd($requestCategories);
-            //dd($id_collection->diff($requestCategories));
-
-            DB::commit();        
+            DB::commit();
+        } catch (ModelNotFoundException $ex) {
+            return response("Modelo não encontrado!");
+        }
     }
 
     /**

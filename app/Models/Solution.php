@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Contracts\CategoryManager;
 use App\Contracts\ComparableCategory;
-
+use App\Exceptions\CategoryAlreadyAssociatedException;
 use App\Exceptions\CategoryNotAssociatedException;
+use App\Exceptions\DuplicateSolutionTitleException;
 use App\Exceptions\MinCategoryNumberNotRespectedException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +40,7 @@ class Solution extends Model implements CategoryManager
     /**
      * @var array $fillable define quais campos o modelo permite ser preenchido.
      */
-    protected $fillable = ["title", "solution_text", "folder_path"];
+    protected $fillable = ["title", "solution_text"];
 
     /**
      * Configura o relacionamento de N para N entre soluções e categorias
@@ -46,15 +48,78 @@ class Solution extends Model implements CategoryManager
     public function categories() : BelongsToMany
     {
         return $this->belongsToMany(Category::class);
-    }   
-
+    } 
+    
     /**
+     * Permite o cadastro de uma nova solução ao sistema, considerando que: o título da solução deve ser único, sendo gerado uma exceção caso contrário.
+     * Na hora de sua criação deve também ser separado um espaço no Storage para seus possíveis arquivos multimídia
+     *      
+     * @throws DuplicateSolutionTitleException
+     *      
+     */
+    public function addSolution() : void
+    {
+        if (!$this->check_if_title_not_exists()) {
+            throw new DuplicateSolutionTitleException("O título passado já foi usado em outra solução!");
+        }
+
+        $this->save();
+    }
+    /**
+     * Edita os dados de uma solução já cadastrada no sistema, sendo necessário informar o id da
+     * solução a ser editada. Importante notar que nesta edição será verificado se o título passado já não está sendo usado
+     *      
+     * @param int $id Número de identificação da solução a ser editada
+     * @throws DuplicateSolutionTitleException
+     * @throws ModelNotFoundException
      * 
      * @todo
      */
-    public function addCategory(Category $comparableCategory) : void
+    public function updateSolution(int $id) : void 
+    {
+        if (!$this->check_if_title_not_exists()) {
+            throw new DuplicateSolutionTitleException("O título passado já foi usado em outra solução!");
+        }
+
+        $solution = Solution::findOrFail($id);
+
+        $solution->update([
+            "title" => $this->title,
+            "solution_text" => $this->solution_text
+        ]);
+        
+    }
+
+    /**
+     * Deleta as soluções e todas as associações de categoria vinculadas a ela. Isto apenas será possível caso
+     * a solução já esteja cadastrada no banco;
+     * 
+     * @throws ModelNotFoundException
+     */
+    public function deleteSolution(int $id)
     {
 
+    }
+
+    /**
+     * Associa uma nova categoria a solução. Isto apenas será possível caso a mesma não tenha sido previamente associada e se
+     * a mesma exista no banco de dados
+     * 
+     * @throws ModelNotFoundException
+     * @throws CategoryAlreadyAssociatedException
+     * @todo
+     */
+    public function addCategory(Category $category) : void
+    {
+        if ($category->checkIfCategoryExist($category)) {
+            throw new ModelNotFoundException("A categoria não foi encontrada na base de dados!");
+        }
+
+        if ($this->checkIfCategoryExist($category)) {
+            throw new CategoryAlreadyAssociatedException("A categoria passada já se encontra associada!");
+        }
+
+        $this->categories()->toggle($category->id);
     }
     /**
      * Remove a associação da solução com uma categoria específica. Entretanto esta ação apenas
@@ -112,6 +177,16 @@ class Solution extends Model implements CategoryManager
     {
         $quant_categories_associated = $this->categories()->get()->count();        
         return ($quant_categories_associated - 1) >= self::MIN_ASSOCIATED_CATEGORY_NUMBER;        
+    }
+
+    /**
+     * Verifica se o título do objeto não foi utilizado em outra solução
+     * 
+     * @return bool
+     */
+    private function check_if_title_not_exists() : bool
+    {
+        return Solution::where("title", "LIKE", $this->title)->get()->isEmpty();
     }
 
 }
