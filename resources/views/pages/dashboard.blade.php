@@ -20,6 +20,7 @@
 
     <script>
       $.ajax({
+        type: "GET",
         url: {{ route("mostrarCategorias") }},
         data: {
           zipcode: 97201
