@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SolutionController;
 
 /*
@@ -15,3 +16,10 @@ use App\Http\Controllers\SolutionController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::get("/index", [SolutionController::class, "searchSolutions"]);
+Route::get("/index-cat", [CategoryController::class, "index"]);
+Route::post("/create", [SolutionController::class, "store"]);
+Route::put("/edit/{id}", [SolutionController::class, "update"]);
+Route::post("/create-category", [CategoryController::class, "store"]);
+Route::delete("/del-category/{id}", [CategoryController::class, "delete"]);

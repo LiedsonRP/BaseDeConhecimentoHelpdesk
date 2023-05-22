@@ -4,6 +4,8 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use App\Models\Category;
+use Mockery;
+use Mockery\MockInterface;
 
 
 #php artisan test --filter=CategoryTest
@@ -45,5 +47,25 @@ class CategoryTest extends TestCase
         $category2->id = 2;
 
         $this->assertFalse($category1->equals($category2));
+    }
+
+    /**
+     * Verifica se uma categoria não existente está sendo cadastrada
+     * 
+     * php artisan test --filter=CategoryTest::category_are_being_inserted
+     */
+    public function category_are_being_inserted() {
+        $category = new Category(["name"=>"ArcGis"]);        
+        
+    }
+
+    /**
+     * Verifica se uma categoria existente ao tentar ser cadastrada novamente
+     * gera uma exceção;
+     * 
+     * php artisan test --filter=check_if_category_existent_not_accepted_again
+     */
+    public function check_if_category_existent_not_accepted_again() {
+
     }
 }

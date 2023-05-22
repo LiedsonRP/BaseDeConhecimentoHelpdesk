@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CategoryAlreadyExistException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Category;
@@ -21,7 +22,7 @@ class CategoryController extends Controller
      */
     public function index() : Response
     {
-        $categories = Category::all();
+        $categories = (new Category())->listCategories();
         return response($categories);
     }
 
@@ -40,17 +41,20 @@ class CategoryController extends Controller
 
         if ($request->filled("name")) {
 
-            $category = new Category(["name" => $request->input("name")]);            
-            
-            if($category->check_if_category_exists()) {
-                $category->save();
-                return $this->index();
-            }
+            try {
+                
+                $category = new Category(["name" => $request->input("name")]);
+                $category->addCategory($category);
 
-            return response([
-                "sucess" => false,
-                "message" => "A categoria cadastrada já existe!"
-            ]);                        
+                return $this->index();
+                
+            } catch(CategoryAlreadyExistException $ex) {
+                
+                return response([
+                    "sucess" => false,
+                    "message" => "A categoria cadastrada já existe!"
+                ]); 
+            }                                               
         }
 
         return response([
@@ -70,7 +74,9 @@ class CategoryController extends Controller
     {
         try {
             
-            Category::findOrFail($id)->delete();
+            $category = Category::findOrFail($id);
+            $category->removeCategory($category);
+
             return $this->index();
 
         } catch(Exception $ex) {

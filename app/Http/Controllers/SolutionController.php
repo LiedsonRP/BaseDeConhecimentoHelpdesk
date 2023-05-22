@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Solution;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 
 /**
  * Controller responsável por gerenciar os registros de soluções no sistema
@@ -53,7 +54,7 @@ class SolutionController extends Controller
 
                 $solution->save();
 
-                return response()->view("pages/testShowSolucao", [
+                return response()->view("pages/edit_solution", [
                     "id" => $solution->id,
                     "title" => $solution->title,
                     "solution_text" => $solution->solution_text,
@@ -94,10 +95,14 @@ class SolutionController extends Controller
 
             //manipulando as categorias
 
-            $requestCategories = collect($request->input("categories"));
-            $id_collection = $solution->categories;
+            $requestCategories = $request->input("categories");        
+            foreach ($requestCategories as $key => $value) {
+                //$categorie = Category::findOrFail($value);
+                $solution->categories();
+            }            
 
-            dd($id_collection->diff($requestCategories));
+            //dd($requestCategories);
+            //dd($id_collection->diff($requestCategories));
 
             DB::commit();        
     }

@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Exceptions\CategoryAlreadyAssociatedException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 /**
  * Modelo que gerencia as soluções do sistema
@@ -45,11 +46,15 @@ class Solution extends Model
      * @param Collection $categoryCollection Coleção com as categorias
      * @todo
      */
-    public function addCategories(Collection $categoryCollection) : void
-    {
-        if ($this->are_categories_associated($categoryCollection)) {
-            
-        }
+    public function addCategories(array $categoryList) : void
+    {        
+        foreach($categoryList as $category) {
+            $is_associated = $this->are_category_associated($category);
+
+            if ($is_associated) {
+                throw new CategoryAlreadyAssociatedException("Uma categória passada já está associada!");
+            }        
+        }            
     }
     
     /**
@@ -72,15 +77,18 @@ class Solution extends Model
      * True, senão False caso uma das categorias estejam já associadas.
      * 
      * @param Collection $categoryCollection Coleção com as categorias
-     * @return boolean
+     * @return bool
      * 
      */
     private function are_categories_associated(Collection $categoryCollection) 
+    {    
+    }
+
+    private function are_category_associated(Category $category) 
     {
         $solution_categories = $this->categories()->get();
-        $solution_categories->contains(function(Category $category) {
-            return $categoryCollection->
-        });
+        return true; //$solution_categories->contains($category);
+        
     }
 
     /**
