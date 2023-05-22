@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
-use App\Exceptions\CategoryAlreadyAssociatedException;
+use App\Contracts\CategoryManager;
+use App\Contracts\ComparableCategory;
+
+use App\Exceptions\CategoryNotAssociatedException;
+use App\Exceptions\MinCategoryNumberNotRespectedException;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,9 +16,14 @@ use Illuminate\Support\Collection;
 /**
  * Modelo que gerencia as soluções do sistema
  */
-class Solution extends Model
+class Solution extends Model implements CategoryManager
 {
     use HasFactory;
+
+    /**
+     * Define o número mínimo de categorias que a solução de estar associada
+     */
+    private const MIN_ASSOCIATED_CATEGORY_NUMBER = 1;
 
     /**
      * @var string $table define o nome da tabela no banco de dados
@@ -37,68 +47,87 @@ class Solution extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+    /**
+     * Verifica e retorna a quantidade de categorias associadas a respectiva solução;
+     * 
+     * @return int
+     */
+    public function getNumberOfCategories()
+    {
+        return $this->categories()->get()->count();
+    }
 
     /**
-     * Recebe uma Collection de categorias (Category) e as associa 
-     * a solução, caso, já não a possua. Se uma das categorias da lista for
-     * já estiver associada, toda a transação será cancelada.
+     * Verifica se é possível remover uma categória da associação, respeitando o 
+     * número mínimo de categorias que devem estar associadas.
      * 
-     * @param Collection $categoryCollection Coleção com as categorias
+     * @return bool
+     */
+    private function can_remove_a_category() : bool
+    {
+        $quant_categories_associated = $this->categories()->get()->count();
+        return $quant_categories_associated - 1 >= self::MIN_ASSOCIATED_CATEGORY_NUMBER;        
+    }
+
+    /**
+     * 
      * @todo
      */
-    public function addCategories(array $categoryList) : void
-    {        
-        foreach($categoryList as $category) {
-            $is_associated = $this->are_category_associated($category);
+    public function addCategory(Category $comparableCategory) : void
+    {
 
-            if ($is_associated) {
-                throw new CategoryAlreadyAssociatedException("Uma categória passada já está associada!");
-            }        
-        }            
     }
+    /**
+     * Remove a associação da solução com uma categoria específica. Entretanto esta ação apenas
+     * poderá ser concluida no caso de ao final ainda possuir o número mínimo de categorias, retornando uma 
+     * exceção caso isto não ocorra.
+     * 
+     * @throws MinCategoryNumberNotRespectedException
+     * @throws CategoryNotAssociatedException
+     * @todo
+     */
+    public function removeCategory(Category $comparableCategory) : void
+    {
+        if ($this->can_remove_a_category()) {
+            throw new MinCategoryNumberNotRespectedException("A solução não terá o número mínimo de categorias associadas após o processo!");
+        }
+        
+        $categories_associated = $this->listCategories();    
+
+        $is_categories_associated = $categories_associated->contains(function(Category $category_associated) use ($comparableCategory) {
+            return $category_associated->equals($comparableCategory);
+        });
+
+        if ($is_categories_associated) {
+            $this->categories()->toggle($comparableCategory->id);
+        } else {
+            throw new CategoryNotAssociatedException("A categoria passada não possui uma associação com a solução!");
+        }
+    }    
     
     /**
-     * Recebe uma Collection de categorias (Category) e as remove da 
-     * solução, caso, as possua e se ao final restar ao menos um número mínimo
-     * de categorias. Caso a operação falhe em alguma categoria toda a 
-     * transação é cancelada.
+     * Retorna todas as categorias associadas a respectiva solução;
      * 
-     * @todo
-     * @param Collection $categoryCollection Coleção com as categorias
+     * @return Illuminate\Support\Collection
      */
-    public function removeCategories(Collection $categoryCollection) : void
+    public function listCategories(): Collection
     {
-
+        return $this->categories()->get();
     }
 
     /**
-     * Verifica se uma a solução já possui algumas das categorias passadas
-     * como parâmetro numa Collection de categorias, caso sim, retorna 
-     * True, senão False caso uma das categorias estejam já associadas.
+     * Verifica se uma categoria comparável está associada está associada a solução
      * 
-     * @param Collection $categoryCollection Coleção com as categorias
-     * @return bool
-     * 
-     */
-    private function are_categories_associated(Collection $categoryCollection) 
-    {    
-    }
-
-    private function are_category_associated(Category $category) 
-    {
-        $solution_categories = $this->categories()->get();
-        return true; //$solution_categories->contains($category);
-        
-    }
-
-    /**
-     * Verifica se um dado título já foi cadastrado previamente no banco de dados
-     * retornando True caso já cadastrado e False do contrário
-     * 
+     * @param ComparableCategory $category Categoria comparavel que será pesquisada
      * @return bool
      */
-    public function check_if_title_already_registered() : bool
+    public function checkIfCategoryExist(ComparableCategory $category): bool
     {
-        return !Solution::where("title", "LIKE", $this->title)->get()->isEmpty();
-    }    
+        $exists = $this->listCategories()->contains(function(ComparableCategory $category_associated) use ($category) {
+            return $category_associated->equals($category);
+        });
+
+        return $exists;
+    }
+
 }

@@ -67,10 +67,9 @@ class CategoryController extends Controller
      * Deleta uma categoria cadastrada no sistema, retirando sua atribuição 
      * de todas as soluções do sistema e retorna as restantes
      * 
-     * @param int $id     
-     * @return Response 
+     * @param int $id          
      */
-    public function delete(int $id) : Response
+    public function delete(int $id)
     {
         try {
             
