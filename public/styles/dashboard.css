@@ -24,8 +24,10 @@ nav.navbar1{
     top: 75%;
     border-radius: 50%;
 }
-.ul-navbar-nav-create-button{
-
+.modal-backdrop{
+    display: none;
+}
+.modal-footer-createTitle{
 }
 .li-navbar-nav-create-button{
     display: flex;
