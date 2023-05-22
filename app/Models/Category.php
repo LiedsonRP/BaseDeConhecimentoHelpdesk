@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Contracts\CategoryManager;
+use App\Contracts\ComparableCategory;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -14,7 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
  * Modelo que gerencia as categorias do sistema
  */
-class Category extends Model implements CategoryManager
+class Category extends Model implements CategoryManager, ComparableCategory
 {
     use HasFactory;
 
@@ -37,40 +39,24 @@ class Category extends Model implements CategoryManager
     public function solutions()
     {
         return $this->belongsToMany(Solution::class);
-    }    
-
-    /**
-     * Verifica se a respctiva instancia de categória é igual a uma
-     * outra, levando em conta que serão considerados iguais caso seu
-     * nome ou id sejam iguais.
-     * 
-     * @param Category $category Categoria a ser comparada
-     * @return bool
-     */
-    public function equals(Category $category) : bool
-    {
-        return $category->id == $this->id || $category->name == $this->name;
-    }
+    }        
 
     /**
      * Adiciona uma nova categoria ao sistema, salvando-a na base de dados
      * caso seu nome e ID não estejam já cadastrados. Ela retornará uma 
      * exceção caso a categoria passada já exista;
      * 
+     * @param Category $category Categoria que deve ser adicionada
      * @throws CategoryAlreadyExistException
      */
-    public function addCategory(Category $comparableCategory) : void
-    {
-        $categoryList = $this->listCategories();
-        $already_exists = $categoryList->contains(function($associatedCategory) use ($comparableCategory){
-            return $associatedCategory->equals($comparableCategory);            
-        });                
-
-        if ($already_exists) {
+    public function addCategory(Category $category) : void
+    {        
+        if ($this->checkIfCategoryExist($category)) {
             throw new CategoryAlreadyExistException("A categoria passada já está cadastrada!");
-        } else {
-            $comparableCategory->save();
-        }
+        } 
+            
+        $category->save();
+        
     }
 
     /**
@@ -79,13 +65,26 @@ class Category extends Model implements CategoryManager
      * após a deleção. Caso venha a ficar sem categoria ou a categoria
      * não exista, será dado uma Exceção.
      * 
+     * @param Category $category Categoria que deve ser removida
      * @throws MinCategoryNumberNotRespectedException
      * @throws ModelNotFoundException
      * @todo
      */
-    public function removeCategory(Category $comparableCategory) : void 
+    public function removeCategory(Category $category) : void 
     {        
-        dd($comparableCategory->solutions()->get());
+        $solutions_associated = $category->solutions()->get();
+        $solutions_have_min_quant_categories = $solutions_associated->every(function (Solution $solution) {
+            
+            $new_quant_categories = $solution->getNumberOfCategories() - 1;
+            return $new_quant_categories >= 1;
+
+        });        
+
+        if ($solutions_have_min_quant_categories) {            
+            //$category->solutions()->toggle($solutions_associated->get("id"));
+        } else {
+            throw new MinCategoryNumberNotRespectedException("Uma ou mais soluções não ficaram com o número mínimo de categorias!");
+        }
     }
 
     /**
@@ -97,6 +96,34 @@ class Category extends Model implements CategoryManager
     public function listCategories() : Collection 
     {
         return Category::all();
+    }
+
+    /**
+     * Verifica se uma Categoria comparável já existe no banco de dados de categorias
+     * 
+     * @param ComparableCategory $category categoria que será pesquisada na estrutura
+     * @return bool
+     */
+    public function checkIfCategoryExist(ComparableCategory $category): bool
+    {
+        $exists =  $this->listCategories()->contains(function(Category $category_stored) use ($category) {
+            return $category_stored->equals($category);
+        });
+
+        return $exists;
+    }
+
+    /**
+     * Verifica se a respctiva instancia de categória é igual a uma
+     * outra, levando em conta que serão considerados iguais caso seu
+     * nome ou id sejam iguais.
+     * 
+     * @param ComparableCategory $category Categoria a ser comparada
+     * @return bool
+     */
+    public function equals(ComparableCategory $category) : bool
+    {
+        return $category->id == $this->id || $category->name == $this->name;
     }
     
 }
