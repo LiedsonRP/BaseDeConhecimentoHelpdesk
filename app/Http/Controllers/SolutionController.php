@@ -2,20 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\DuplicateSolutionTitleException;
-use App\Exceptions\MinCategoryNumberNotRespectedException;
-use Illuminate\Http\Request;
 use App\Models\Solution;
+use App\Models\SolutionSearchTool;
+use App\Models\Category;
+
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Exception;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Exceptions\DuplicateSolutionTitleException;
+use App\Exceptions\MinCategoryNumberNotRespectedException;
+use Exception;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 /**
  * Controller responsável por gerenciar os registros de soluções no sistema
  */
 class SolutionController extends Controller
 {
+
+    protected SolutionSearchTool $searchTool;
+
+    public function __construct(SolutionSearchTool $searchTool)
+    {
+        $this->searchTool = $searchTool;
+    }
 
     /**
      * Retorna as atualizações cadastradas no sistema, levando em conta os seguintes parâmetros de pesquisa:
@@ -33,13 +46,32 @@ class SolutionController extends Controller
     {
         if ($request->filled("categories")) {
 
+            foreach ($request->input("categories") as $category_id) {
+                
+                $category = Category::findOrFail($category_id);
+                $this->searchTool->filter_by_category($category);
+            }                        
         }
 
         if ($request->filled("title")) {
+            $this->searchTool->search_title($request->input("title"));
+        }
 
-        }        
+        $search_results_id = $this->searchTool->getResult()->pluck("solution_number");
+        $solutions_resulted = Solution::find($search_results_id)->load("categories");
 
-        return Solution::with("categories")->paginate(15);
+        /**modificar formato do objeto*/
+        $solutions_resulted->transform(function (Solution $solution) {
+            return $solution_modified = collect($solution)->except("pivot");                        
+        });
+                
+        $paginated_items = new LengthAwarePaginator($solutions_resulted, $solutions_resulted->count(), 9);
+
+        return response([
+            "data" => $paginated_items->items(),
+            "current_page" => $paginated_items->currentPage(),
+            "last_page" => $paginated_items->lastPage()
+        ]);
     }
 
     /**
@@ -95,13 +127,13 @@ class SolutionController extends Controller
     {
 
         if ($request->filled(["title", "solution_text"])) {
-
+            
             try {
 
                 DB::transaction(function () use (&$id, &$request) {
                     
                     $RequestSolution = new Solution(["title"=>$request->input("title"), "solution_text"=>$request->input("solution_text")]);                   
-
+                    
                     $solution = Solution::findOrFail($id);
                     $solution->updateSolution($RequestSolution);
 
