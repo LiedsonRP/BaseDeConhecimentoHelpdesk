@@ -46,8 +46,7 @@ Route::prefix("/solucao")->group(function () {
          */        
         Route::put("/edit/{id}", "update")->name("editarSolucao");
         /**
-         * Rota que permite deletar uma solução
-         * @todo
+         * Rota que permite deletar uma solução         
          */
         Route::delete("/delete/{id}", "delete")->name("deletarSolucao");
     });
@@ -80,12 +79,12 @@ Route::prefix("/solucao")->group(function () {
 
     /**
      * Rota que leva para a página principal da aplicação
-     * @todo
+     * 
      */
     Route::view("/dashboard", "pages/dashboard")->name("dashboard");
     /**
      * Rota que leva para a tela de edição da solução
-     * @todo
+     *
      */
     Route::view("/card-solucao", "pages/edit_solution")->name("cardView");
 

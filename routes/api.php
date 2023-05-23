@@ -18,6 +18,7 @@ use App\Http\Controllers\SolutionController;
 Route::get("/index", [SolutionController::class, "searchSolutions"]);
 Route::get("/index-cat", [CategoryController::class, "index"]);
 Route::post("/create", [SolutionController::class, "store"]);
+Route::delete("/delete/{id}", [SolutionController::class, "delete"]);
 Route::put("/edit/{id}", [SolutionController::class, "update"]);
 Route::post("/create-category", [CategoryController::class, "store"]);
 Route::delete("/del-category/{id}", [CategoryController::class, "delete"]);

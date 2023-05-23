@@ -91,12 +91,16 @@ class Solution extends Model implements CategoryManager
 
     /**
      * Deleta as soluções e todas as associações de categoria vinculadas a ela. Isto apenas será possível caso
-     * a solução já esteja cadastrada no banco;
+     * a solução já esteja cadastrada no banco
      * 
-     * @throws ModelNotFoundException
+     * @param Solution $solution Solução que deve ser deletada          
      */
-    public function deleteSolution(int $id)
+    public function deleteSolution(Solution $solution)
     {
+        $associations_id = $solution->listCategories()->pluck("id");        
+        $solution->categories()->toggle($associations_id);
+        $solution->delete();
+
     }
 
     /**

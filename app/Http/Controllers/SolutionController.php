@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\Solution;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use App\Models\Category;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -122,11 +121,20 @@ class SolutionController extends Controller
      * o redirecionamento para a rota que deletará a pasta da categoria
      * 
      * @param int $id Número de identificação da solução
+     * @param Request $request
      * @return Redirect
-     * 
-     * @todo
+     *      
      */
-    public function delete(int $id)
+    public function delete(Request $request, int $id)
     {
+        try {
+            $solution = Solution::findOrFail($id);
+            $solution->deleteSolution($solution);
+
+            return $this->searchSolutions($request);
+
+        } catch (ModelNotFoundException $ex) {
+            return back()->withInput()->withErrors("Solução não encontrada!");
+        }
     }
 }
