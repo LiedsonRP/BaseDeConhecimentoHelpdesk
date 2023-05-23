@@ -31,6 +31,14 @@ class SolutionController extends Controller
      */
     public function searchSolutions(Request $request)
     {
+        if ($request->filled("categories")) {
+
+        }
+
+        if ($request->filled("title")) {
+
+        }        
+
         return Solution::with("categories")->paginate(15);
     }
 
@@ -91,12 +99,8 @@ class SolutionController extends Controller
             try {
 
                 DB::transaction(function () use (&$id, &$request) {
-                    $solution = Solution::findOrFail($id);
-
-                    $solution->update([
-                        "title" => $request->input("title"),
-                        "solution_text" => $request->input("solution_text")
-                    ]);
+                    $solution = new Solution();                    
+                    $solution->updateSolution($id);
 
                     $requestCategories = $request->input("categories");
 
