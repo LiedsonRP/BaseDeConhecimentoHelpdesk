@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\DuplicateSolutionTitleException;
+use App\Exceptions\MinCategoryNumberNotRespectedException;
 use Illuminate\Http\Request;
 use App\Models\Solution;
 use Illuminate\Http\Response;
@@ -81,31 +82,39 @@ class SolutionController extends Controller
      * 
      * @param Request $request
      * @return Redirect
-     * 
-     * @todo
+     *      
      */
     public function update(Request $request, int $id)
     {
 
-        try {
-            DB::beginTransaction();
+        if ($request->filled(["title", "solution_text"])) {
 
-            $solution = Solution::findOrFail($id);
-            $requestCategories = $request->input("categories");
+            try {
 
-            foreach ($requestCategories as $id) {
-                $category = Category::findOrFail($id);
-                $exists = $solution->checkIfCategoryExist($category);
+                DB::transaction(function () use (&$id, &$request) {
+                    $solution = Solution::findOrFail($id);
 
-                if (!$exists) {
-                    $solution->addCategory($category);
-                }
+                    $solution->update([
+                        "title" => $request->input("title"),
+                        "solution_text" => $request->input("solution_text")
+                    ]);
+
+                    $requestCategories = $request->input("categories");
+
+                    $solution->add_categories_not_existent_by_id($requestCategories);
+                    $solution->remove_categories_existent_by_id($requestCategories);
+                });                
+
+                return $this->searchSolutions($request);
+
+            } catch (ModelNotFoundException $ex) {
+                return back()->withInput()->withErrors("Categoria ou solução não encontrada!");
+            } catch (MinCategoryNumberNotRespectedException $ex) {
+                return back()->withInput()->withErrors("A solução deve ter no mínimo uma categoria associada!");
             }
-
-            DB::commit();
-        } catch (ModelNotFoundException $ex) {
-            return response("Modelo não encontrado!");
         }
+
+        return back()->withInput()->withErrors("Há informações faltando na sua solução!");
     }
 
     /**

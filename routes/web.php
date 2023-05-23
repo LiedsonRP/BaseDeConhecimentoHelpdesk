@@ -42,8 +42,7 @@ Route::prefix("/solucao")->group(function () {
          */
         Route::get("/solucoes", "searchSolutions")->name("mostrarCategorias");
         /**
-         * Rota que permite a edição do registro de uma categoria
-         * @todo
+         * Rota que permite a edição do registro de uma categoria         
          */        
         Route::put("/edit/{id}", "update")->name("editarSolucao");
         /**

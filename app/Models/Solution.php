@@ -45,11 +45,11 @@ class Solution extends Model implements CategoryManager
     /**
      * Configura o relacionamento de N para N entre soluções e categorias
      */
-    public function categories() : BelongsToMany
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
-    } 
-    
+    }
+
     /**
      * Permite o cadastro de uma nova solução ao sistema, considerando que: o título da solução deve ser único, sendo gerado uma exceção caso contrário.
      * Na hora de sua criação deve também ser separado um espaço no Storage para seus possíveis arquivos multimídia
@@ -57,7 +57,7 @@ class Solution extends Model implements CategoryManager
      * @throws DuplicateSolutionTitleException
      *      
      */
-    public function addSolution() : void
+    public function addSolution(): void
     {
         if (!$this->check_if_title_not_exists()) {
             throw new DuplicateSolutionTitleException("O título passado já foi usado em outra solução!");
@@ -75,7 +75,7 @@ class Solution extends Model implements CategoryManager
      * 
      * @todo
      */
-    public function updateSolution(int $id) : void 
+    public function updateSolution(int $id): void
     {
         if (!$this->check_if_title_not_exists()) {
             throw new DuplicateSolutionTitleException("O título passado já foi usado em outra solução!");
@@ -87,7 +87,6 @@ class Solution extends Model implements CategoryManager
             "title" => $this->title,
             "solution_text" => $this->solution_text
         ]);
-        
     }
 
     /**
@@ -98,7 +97,6 @@ class Solution extends Model implements CategoryManager
      */
     public function deleteSolution(int $id)
     {
-
     }
 
     /**
@@ -106,12 +104,11 @@ class Solution extends Model implements CategoryManager
      * a mesma exista no banco de dados
      * 
      * @throws ModelNotFoundException
-     * @throws CategoryAlreadyAssociatedException
-     * @todo
+     * @throws CategoryAlreadyAssociatedException     
      */
-    public function addCategory(Category $category) : void
+    public function addCategory(Category $category): void
     {
-        if ($category->checkIfCategoryExist($category)) {
+        if (!$category->checkIfCategoryExist($category)) {
             throw new ModelNotFoundException("A categoria não foi encontrada na base de dados!");
         }
 
@@ -129,19 +126,19 @@ class Solution extends Model implements CategoryManager
      * @throws MinCategoryNumberNotRespectedException
      * @throws CategoryNotAssociatedException    
      */
-    public function removeCategory(Category $category) : void
+    public function removeCategory(Category $category): void
     {
         if (!$this->can_remove_a_category()) {
             throw new MinCategoryNumberNotRespectedException("A solução não terá o número mínimo de categorias associadas após o processo!");
-        }        
+        }
 
         if (!$this->checkIfCategoryExist($category)) {
             throw new CategoryNotAssociatedException("A categoria passada não possui uma associação com a solução!");
         }
-        
+
         $this->categories()->toggle($category->id);
-    }    
-    
+    }
+
     /**
      * Retorna todas as categorias associadas a respectiva solução;
      * 
@@ -160,23 +157,23 @@ class Solution extends Model implements CategoryManager
      */
     public function checkIfCategoryExist(ComparableCategory $category): bool
     {
-        $exists = $this->listCategories()->contains(function(ComparableCategory $category_associated) use ($category) {
+        $exists = $this->listCategories()->contains(function (ComparableCategory $category_associated) use ($category) {
             return $category_associated->equals($category);
         });
 
         return $exists;
     }
 
-     /**
+    /**
      * Verifica se é possível remover uma categória da associação, respeitando o 
      * número mínimo de categorias que devem estar associadas.
      * 
      * @return bool
      */
-    private function can_remove_a_category() : bool
+    private function can_remove_a_category(): bool
     {
-        $quant_categories_associated = $this->categories()->get()->count();        
-        return ($quant_categories_associated - 1) >= self::MIN_ASSOCIATED_CATEGORY_NUMBER;        
+        $quant_categories_associated = $this->categories()->get()->count();
+        return ($quant_categories_associated - 1) >= self::MIN_ASSOCIATED_CATEGORY_NUMBER;
     }
 
     /**
@@ -184,9 +181,44 @@ class Solution extends Model implements CategoryManager
      * 
      * @return bool
      */
-    private function check_if_title_not_exists() : bool
+    private function check_if_title_not_exists(): bool
     {
         return Solution::where("title", "LIKE", $this->title)->get()->isEmpty();
     }
 
+    /**
+     * Associa novas categorias a uma solução, ignorando aquelas que já estavam associadas. Ela segue a lógica que
+     * se a categoria não se encontrava antes na lista de associações, mas está na nova, deve então ser adicionada. Ela ignora
+     * as categorias que já estavam presentes
+     *      
+     * @param array $categories_id Lista contendo os ids das categorias
+     */
+    public function add_categories_not_existent_by_id(array $categories_id) : void
+    {
+        foreach ($categories_id as $id) {
+
+            $category = Category::findOrFail($id);
+            $exists = $this->checkIfCategoryExist($category);
+
+            if (!$exists) {
+                $this->addCategory($category);
+            }
+        }        
+    }
+
+    /**
+     * Remove a associação de categorias com a solução baseado na lista de ids. Isto se dá pela lógica que, se o id existia 
+     * anteriormente na lista de associações, mas não se encontra na nova lista, deve portanto ser descartado. O outros valores são ignorados
+     *      
+     * @param array $categories_id
+     */
+    public function remove_categories_existent_by_id(array $categories_id) : void
+    {
+        foreach ($this->listCategories() as $category) {
+
+            if (!in_array($category->id, $categories_id)) {
+                $this->removeCategory($category);
+            }
+        }
+    }
 }
