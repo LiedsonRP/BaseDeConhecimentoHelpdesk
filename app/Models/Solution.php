@@ -75,13 +75,14 @@ class Solution extends Model implements CategoryManager
      * 
      * @todo
      */
-    public function updateSolution(int $id): void
-    {
-        if (!$this->check_if_title_not_exists()) {
-            throw new DuplicateSolutionTitleException("O título passado já foi usado em outra solução!");
-        }
-
-        $solution = Solution::findOrFail($id);
+    public function updateSolution(Solution $solution): void
+    {                                
+        if ($this->title != $solution->title) {
+            
+            if (!$this->check_if_title_not_exists()) {
+                throw new DuplicateSolutionTitleException("O título passado já foi usado em outra solução!");
+            }   
+        }             
 
         $solution->update([
             "title" => $this->title,

@@ -99,8 +99,11 @@ class SolutionController extends Controller
             try {
 
                 DB::transaction(function () use (&$id, &$request) {
-                    $solution = new Solution();                    
-                    $solution->updateSolution($id);
+                    
+                    $RequestSolution = new Solution(["title"=>$request->input("title"), "solution_text"=>$request->input("solution_text")]);                   
+
+                    $solution = Solution::findOrFail($id);
+                    $solution->updateSolution($RequestSolution);
 
                     $requestCategories = $request->input("categories");
 
