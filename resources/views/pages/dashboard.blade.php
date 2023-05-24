@@ -21,10 +21,8 @@
     <script>
       $.ajax({
         type: "GET",
-        url: {{ route("mostrarCategorias") }},
-        data: {
-          zipcode: 97201
-        },
+        url: "/mostrarCategorias",
+        data: {json},
         success: function( id, name ) {
           $( "#icategoria-search" ).html("<option value="+id+">+"name"+</option>");
         }
