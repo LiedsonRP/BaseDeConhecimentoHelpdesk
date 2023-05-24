@@ -18,25 +18,20 @@ class SolutionStorageController extends Controller
      * @return Redirect
      */
     public function upload(Request $request)
-    {    
+    {
 
         if ($request->filled("id")) {
-            $id = $request->input("id");            
+            $id = $request->input("id");
 
             if (!Storage::directoryExists($id)) {
                 Storage::makeDirectory($id);
-            }                        
-
-            $uploadedFiles = $request->allFiles()["files"];            
-
-            for ($i = 0; $i < sizeof($uploadedFiles); $i++) {                
-                $file = $uploadedFiles[$i];
-                Storage::putFileAs($id, $file, $file->getClientOriginalName());
-                unset($file);
             }
 
+            $uploadedFile = $request->file("file");
+
+            Storage::putFile($id, $uploadedFile);            
             return $this->index($id);
-        }        
+        }
     }
 
     /**
@@ -47,25 +42,25 @@ class SolutionStorageController extends Controller
      * 
      * @todo corrigir os links enviados 
      */
-    public function index(int $id) 
+    public function index(int $id)
     {
-        $file_names = Storage::allFiles($id);     
-        
+        $file_names = Storage::allFiles($id);
+
         $url_properties_creator = function ($file_path) {
-            
-            $file_name = explode("/", $file_path)[1];            
+
+            $file_name = explode("/", $file_path)[1];
 
             return [
                 "file_name" => $file_name,
                 "file_path" => Storage::url($file_path)
             ];
         };
-        
-        $urls = array_map($url_properties_creator, $file_names); 
-        
+
+        $urls = array_map($url_properties_creator, $file_names);
+
         var_dump($urls);
 
-        return view("pages/test", ["files_url"=>$urls, "id" => $id]);
+        return response($urls, 200);
     }
 
     /**
@@ -80,8 +75,8 @@ class SolutionStorageController extends Controller
     public function delete_file(Request $request, int $id)
     {
         if ($request->filled("file_name")) {
-            
-            $storage_path = $id."/".$request->input("file_name");            
+
+            $storage_path = $id . "/" . $request->input("file_name");
             Storage::delete($storage_path);
 
             return $this->index($id);
