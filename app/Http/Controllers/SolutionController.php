@@ -57,15 +57,8 @@ class SolutionController extends Controller
             $this->searchTool->search_title($request->input("title"));
         }
 
-        $search_results_id = $this->searchTool->getResult()->pluck("solution_number");
-        $solutions_resulted = Solution::find($search_results_id)->load("categories");
-
-        /**modificar formato do objeto*/
-        $solutions_resulted->transform(function (Solution $solution) {
-            return $solution_modified = collect($solution)->except("pivot");                        
-        });
-                
-        $paginated_items = new LengthAwarePaginator($solutions_resulted, $solutions_resulted->count(), 9);
+        $search_results = $this->searchTool->getResult();                
+        $paginated_items = new LengthAwarePaginator($search_results, $search_results->count(), 9);
 
         return response([
             "data" => $paginated_items->items(),

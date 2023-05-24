@@ -30,7 +30,21 @@ class SolutionSearchTool
      */
     public function getResult() : Collection
     {
-        return $this->builder->select()->distinct(["title"])->get();
+        $results = $this->builder->select()->distinct(["title"])->get()->pluck("solution_number");
+        
+        $solutions = $results->map(function($id) {
+            $solution = Solution::find($id)->load("categories");                
+            
+            $categories  = $solution->categories()->get()->map(function (Category $category) {
+                return new Category($category->attributesToArray());
+            });
+
+            $solution->setRelation("categories", $categories);
+            
+            return $solution;
+        });        
+
+        return $solutions;
     }
 
     /**

@@ -32,7 +32,7 @@ class Category extends Model implements CategoryManager, ComparableCategory
     /**
      * Indica quais campos podem ser preenchidos
      */
-    protected $fillable = ["name"];
+    protected $fillable = ["id", "name"];
 
     /**
      * Configura o relacionamento de N para N entre categorias e soluções
