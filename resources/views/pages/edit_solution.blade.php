@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Helpdesk Banco de Soluções</title>
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.24.2/jodit.es2018.min.css"
@@ -15,8 +15,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href={{ asset("styles/edit_solution.css") }}>
+     <!--Link Ajax-->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 
+    <link rel="stylesheet" href={{ asset("styles/edit_solution.css") }}>
+   
 </head>
 <body>
     <section>
@@ -32,11 +36,8 @@
 
             <form class="form-jodit">
                 <div class="input-categoria">
-                  <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                  <select id="addcategoria" class="form-select" aria-label="Default select example">
+                    <option selected>----------------</option>
                   </select>
                   <div class="input-group input-file">
                     <input type="file" class="form-control " id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
@@ -101,5 +102,21 @@
     <script>
         var editor = Jodit.make('#editor');
     </script>
+    <script>
+      $.ajax({
+          type: "GET",
+          url: "{{ route('mostrarCategorias') }}",
+          success: function(response) {                
+              categorias = response;
+              categorias.forEach(element => {
+                //Adiciona as categorias ao icategoria-search
+                  $("option").add("<option value=" + element.id + ">" + element.name + "</option>")
+                      .appendTo("#addcategoria");
+
+                  //Adcionas as categorias ao 
+              });
+          }
+      });
+  </script>
 </body>
 </html>
