@@ -16,6 +16,7 @@ use App\Http\Controllers\SolutionStorageController;
 |
 */
 
+Route::get("/index-img/{id}", [SolutionStorageController::class, "index"]);
 Route::post("/insert-file", [SolutionStorageController::class, "upload"]);
 Route::get("/index", [SolutionController::class, "searchSolutions"]);
 Route::get("/index-cat", [CategoryController::class, "index"]);

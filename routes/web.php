@@ -23,6 +23,8 @@ Route::get('/', function () {
     return view('pages/dashboard');
 });
 
+Route::view("/teste", "pages/imageTest");
+
 /**
  * Grupo de rotas que engloba a manipulação e vizualização de páginas e dados das soluções
  */
