@@ -250,13 +250,13 @@
             type: "GET",
             url: "{{ route('mostrarSolucoes') }}",
             success: function(response) {                
-                const solucoes = response.data;
-                const categories = solucoes.categories;
-                console.log(categories);
-                //<li>`+element.categories[0].name+`</li>
-                //constroe o conteudo do card
-                solucoes.forEach(element => {
-                    console.log(element)
+                const solucoes = response.data[0];
+
+                const card_solucao = response.data;
+                console.log(solucoes)
+                const categories = card_solucao.categories;
+                
+                card_solucao.forEach(element => {
                     const categories = element.categories;
 
                     //Novo array com os nomes das categorias
@@ -268,7 +268,7 @@
                     
                     $("#cardContent").html("<div class='card-body'>");
 
-                    $(".card-body").html(`
+                   var card_content = `
                     <h5 class="card-title">${element.title}</h5>
                     <div class="card-text">${element.solution_text}</div>
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -293,7 +293,9 @@
                         <img src="{{ asset('icons/deleteSolution.svg') }}" alt="editSolution">
                         Deletar
                     </button>
-                    `);
+                    `;
+                    
+                    $(".card-body").append(card_content);
                 });
 
             }
