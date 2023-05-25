@@ -64,6 +64,11 @@ section{
     height: 50px;
 }
 
+.categorias_solucao{
+    max-height: 30px;
+    overflow: scroll;
+}
+
 @media screen and (max-width: 700px){
     .card_container{
         flex-direction: column;

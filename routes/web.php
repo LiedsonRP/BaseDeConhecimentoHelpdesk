@@ -42,7 +42,7 @@ Route::prefix("/solucao")->group(function () {
          * Rota que leva a função de retornar todos as soluções cadastradas no banco de dados
          * @todo
          */
-        Route::get("/solucoes", "searchSolutions")->name("mostrarCategorias");
+        Route::get("/solucoes", "searchSolutions")->name("mostrarSolucoes");
         /**
          * Rota que permite a edição do registro de uma categoria         
          */        

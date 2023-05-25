@@ -34,4 +34,19 @@ export function postCategorias(){
     
 }
 
+export function getSolucao(){
+    $.ajax({
+        type: "GET",
+        url: "{{ route('mostrarCategorias') }}",        
+        success: function( response ) {
+          console.log(response);
+          var categorias = [{"id": 1, "name": "software"},{"id": 1, "name": "pc"}];
+
+          categorias.forEach(element => {
+              $( "option" ).add( "<option value="+element.id+">"+element.name+"</option>" ).appendTo( "#icategoria-search" );
+          });
+        }
+      });
+}
+
 export default getCategorias();

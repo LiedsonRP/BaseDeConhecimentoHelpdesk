@@ -77,7 +77,7 @@ class SolutionController extends Controller
      * @return Response
      * 
      */
-    public function store(Request $request): Response
+    public function store(Request $request)
     {
         if ($request->filled(["title"])) {
 
@@ -96,6 +96,7 @@ class SolutionController extends Controller
                     "solution_text" => $solution->solution_text,
                     "categories" => []
                 ]);
+
             } catch (DuplicateSolutionTitleException $ex) {
                 return back()->withInput()->withErrors("O título passado já foi usado em outra solução!");
             } catch (Exception $ex) {

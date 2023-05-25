@@ -42,19 +42,7 @@
                             </svg>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#"></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link disabled"></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link disabled"></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link disabled"></a>
-                                </li>
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">     
                             </ul>
                             <form class="d-flex" role="search">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
@@ -192,109 +180,28 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form name="cadTituloCategoria" method="POST" action="{{ route('cadSolucao') }}">
+                            @csrf
                             <div class="mb-3">
                                 <label for="icategoria" class="form-label">Título da Solução: </label>
-                                <input type="text" class="form-control" id="icategoria"
+                                <input name="title" type="text" class="form-control" id="icategoria"
                                     aria-describedby="emailHelp">
                                 <div class="form-text">Insira um título para a sua solução</div>
                             </div>
-                        </form>
                     </div>
                     <div class="modal-footer modal-footer-createTitle">
                         <button type="button" class="btn btn-danger button-create-title-task"
                             data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-success button-create-title-task">Criar Solução</button>
+                        <button type="submit" class="btn btn-success button-create-title-task">Criar Solução</button>
                     </div>
+                </form>
                 </div>
             </div>
         </div>
     </div>
     <section>
         <!-- Content com os conteudos -->
-        <div class="card_container card w-100 mb-3">
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-            <div class="card card_content">
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-                        consequatur id cum ea aliquid exercitationem blanditiis, natus, impedit doloribus deleniti optio
-                        a fugit quis praesentium, odio veritatis earum ab hic?</p>
-                    <a href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">Editar</a>
-                </div>
-            </div>
-        </div>
+        <div class="card_container card w-100 mb-3" id="cardContainer"></div>
         <!-- Paginacao -->
 
         <div class="paginacao">
@@ -320,6 +227,7 @@
     <!-- <script src="{{ asset('scripts/Ajax.js') }}" defer></script> -->
     
     <script>
+        //script que adiciona as categorias do BD na aba de pesquia por categorias
         $.ajax({
             type: "GET",
             url: "{{ route('mostrarCategorias') }}",
@@ -332,6 +240,62 @@
 
                     //Adcionas as categorias ao 
                 });
+            }
+        });
+    </script>
+
+    <script>
+        //script que cria o card de solucao
+        $.ajax({
+            type: "GET",
+            url: "{{ route('mostrarSolucoes') }}",
+            success: function(response) {                
+                const solucoes = response.data;
+                const categories = solucoes.categories;
+                console.log(categories);
+                //<li>`+element.categories[0].name+`</li>
+                //constroe o conteudo do card
+                solucoes.forEach(element => {
+                    console.log(element)
+                    const categories = element.categories;
+
+                    //Novo array com os nomes das categorias
+                    const categoryNames = categories.map(function(category) {
+                        return category.name;
+                    });
+
+                    $("#cardContainer").html("<div class='card card_content' id='cardContent'></div>");
+                    
+                    $("#cardContent").html("<div class='card-body'>");
+
+                    $(".card-body").html(`
+                    <h5 class="card-title">${element.title}</h5>
+                    <div class="card-text">${element.solution_text}</div>
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Categorias
+                                </a>
+                                <ul class="dropdown-menu" id="card_categorias_solucao+${element.id}+">
+                                    ${categoryNames.map(function(name) {
+                                        return `<li><p class="dropdown-item">${name}</p></li>`;
+                                    }).join("")}
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <button href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">
+                        <img src="{{ asset('icons/editSolution.svg') }}" alt="editSolution">
+                        Editar
+                    </button>
+                    <button class="btn btn-danger button-edit">
+                        <img src="{{ asset('icons/deleteSolution.svg') }}" alt="editSolution">
+                        Deletar
+                    </button>
+                    `);
+                });
+
             }
         });
     </script>
@@ -355,5 +319,4 @@
         });
     </script>
 </body>
-
 </html>
