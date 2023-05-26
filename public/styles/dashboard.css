@@ -59,9 +59,13 @@ section{
 .card-title{
     text-align: center;
 }
-.button-edit{
+.button-edit, .button-delete{
     width: 40%;
     height: 50px;
+}
+
+.updated_atualizated_solution{
+    font-size: 12px;
 }
 
 .categorias_solucao{

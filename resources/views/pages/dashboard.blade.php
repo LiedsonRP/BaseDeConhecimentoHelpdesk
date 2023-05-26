@@ -139,7 +139,7 @@
                                                     <div class="mb-3">
                                                         <label for="icategoria" class="form-label">Categoria: </label>
                                                         <input name="name" type="text" class="form-control"
-                                                            id="icategoria" aria-describedby="emailHelp">
+                                                            id="iaddcategoria" aria-describedby="emailHelp">
                                                         <div id="emailHelp" class="form-text">Insira uma categoria
                                                             diferente das existentes.</div>
                                                     </div>
@@ -262,7 +262,7 @@
                     
                     //Novo array com os nomes das categorias
                     const categoryNames = categories.map(function(category) {
-                        return category.name;
+                        return category;
                     });
 
                     $("#cardContainer").append(`<div class='card card_content card_content_principal${element.id}'></div>`);
@@ -271,6 +271,10 @@
 
                    var card_content = `
                     <h5 class="card-title">${element.title}</h5>
+                    <div class="updated_atualizated_solution">
+                        <span>Criação: ${element.created_at}</span>
+                        <span>Atualização: ${element.updated_at}</span>
+                    </div>
                     <div class="card-text">${element.solution_text}</div>
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item dropdown">
@@ -280,17 +284,17 @@
                                 </a>
                                 <ul class="dropdown-menu" id="card_categorias_solucao">
                                     ${categoryNames.map(function(name) {
-                                        return `<li><p class="dropdown-item">${name}</p></li>`;
+                                        return `<li id=${name.id}><p class="dropdown-item">${name.name}</p></li>`;
                                     }).join("")}
                                 </ul>
                             </li>
                         </ul>
 
-                    <button href={{ route('cardView') }} class="btn btn-primary button-edit" target="_self">
+                    <button class="btn btn-primary button-edit">
                         <img src="{{ asset('icons/editSolution.svg') }}" alt="editSolution">
                         Editar
                     </button>
-                    <button class="btn btn-danger button-edit">
+                    <button class="btn btn-danger button-delete">
                         <img src="{{ asset('icons/deleteSolution.svg') }}" alt="editSolution">
                         Deletar
                     </button>
@@ -304,6 +308,7 @@
     </script>
 
     <script>
+        //form que cadastra categorias
         $(function() {
             $('form[name="cadCategory"]').submit(function(event) {
 
@@ -320,6 +325,32 @@
                 });
             });
         });
+    </script>
+
+    <script>
+        //script que envia os dados do card_body corrente para a pagina de edicao
+        $(function() {
+            $('.button-edit').click(function(event) {
+                event.preventDefault();
+                // Get the card ID or any other data you need for the request
+                var cardId = $(this).closest('.card_content').attr('id');
+                $.ajax({
+                method: "POST",
+                url: "{{ route('cardView') }}",
+                data: { cardId: cardId },
+                dataType: "json",
+                success: function(response) {
+                    // Handle the success response
+                    alert("Deu certo")
+                },
+                error: function(xhr, status, error) {
+                    // Handle the error response
+                    alert("Erro ao editar a tarefa")
+                }
+                });
+            });
+        });
+
     </script>
 </body>
 </html>
