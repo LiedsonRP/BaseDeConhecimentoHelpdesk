@@ -30,7 +30,7 @@ class SolutionSearchTool
      */
     public function getResult() : Collection
     {
-        $results = $this->builder->select()->distinct(["title"])->get()->pluck("solution_number");
+        $results = $this->builder->orderBy("solution_number", "asc")->select()->distinct(["title"])->get()->pluck("solution_number");
         
         $solutions = $results->map(function($id) {
             $solution = Solution::find($id)->load("categories");                

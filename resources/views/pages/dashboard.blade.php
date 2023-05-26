@@ -249,24 +249,25 @@
         $.ajax({
             type: "GET",
             url: "{{ route('mostrarSolucoes') }}",
-            success: function(response) {                
-                const solucoes = response.data[0];
+            success: function(response) {
 
                 const card_solucao = response.data;
-                console.log(solucoes)
+                console.log(card_solucao)
+
                 const categories = card_solucao.categories;
                 
                 card_solucao.forEach(element => {
+                    console.log(element)
                     const categories = element.categories;
-
+                    
                     //Novo array com os nomes das categorias
                     const categoryNames = categories.map(function(category) {
                         return category.name;
                     });
 
-                    $("#cardContainer").html("<div class='card card_content' id='cardContent'></div>");
+                    $("#cardContainer").append(`<div class='card card_content card_content_principal${element.id}'></div>`);
                     
-                    $("#cardContent").html("<div class='card-body'>");
+                    $(`.card_content_principal${element.id}`).append(`<div class="card-body" id="card-body-principal${element.id}"></div>`);
 
                    var card_content = `
                     <h5 class="card-title">${element.title}</h5>
@@ -277,7 +278,7 @@
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     Categorias
                                 </a>
-                                <ul class="dropdown-menu" id="card_categorias_solucao+${element.id}+">
+                                <ul class="dropdown-menu" id="card_categorias_solucao">
                                     ${categoryNames.map(function(name) {
                                         return `<li><p class="dropdown-item">${name}</p></li>`;
                                     }).join("")}
@@ -295,7 +296,7 @@
                     </button>
                     `;
                     
-                    $(".card-body").append(card_content);
+                    $(`#card-body-principal${element.id}`).append(card_content);
                 });
 
             }
