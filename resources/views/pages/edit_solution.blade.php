@@ -31,10 +31,14 @@
                   <li class="breadcrumb-item active" aria-current="page">Editar</li>
                 </ol>
               </nav>
-              <h2>{{ $solution["title"] }}</h2>
-              <div>Criado em: {{ $solution["created_at"] }}</div>
-              <div>Atualizado em: {{ $solution["updated_at"] }}</div>
-            <textarea id="editor" name="editor">{{ $solution["text"] }}</textarea>
+
+              <form action={{ route("editarSolucao", $solution["id"]) }}>
+                @csrf
+                <h2>{{ $solution["title"] }}</h2>
+                <div>Criado em: {{ $solution["created_at"] }}</div>
+                <div>Atualizado em: {{ $solution["updated_at"] }}</div>
+                            <textarea id="editor" name="editor">{{ $solution["solution_text"] }}</textarea>
+              </form>
 
             <form class="form-jodit">
                 <div class="input-categoria">
