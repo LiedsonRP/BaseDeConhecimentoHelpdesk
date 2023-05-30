@@ -58,9 +58,7 @@
                                         </a>
                                         <ul class="dropdown-menu" id="header-categorias">
                                             <li>
-                                                <hr class="dropdown-divider">
                                             </li>
-                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -93,7 +91,7 @@
                             <div class="offcanvas-body">
                                 <!-- Search -->
                                 <h6>Pesquisar por:</h6>
-                                <label for="ititulo-search">Tiítulo: </label>
+                                <label for="ititulo-search">Título: </label>
                                 <form class="d-flex mt-3" role="search">
                                     <input class="form-control me-2" id="ititulo-search" type="search"
                                         placeholder="Search" aria-label="Search">
@@ -113,7 +111,7 @@
                                         <!-- DropBox -->
                                         <select id="icategoria-search" class="form-select btn-terciary"
                                             aria-label="Default select example">
-                                            <option selected>Categorias</option>
+                                            <option selected></option>
                                         </select>
                                     </form>
                                     <hr>
@@ -237,8 +235,9 @@
                   //Adiciona as categorias ao icategoria-search
                     $("option").add("<option value=" + element.id + ">" + element.name + "</option>")
                         .appendTo("#icategoria-search");
+                    //Adcionas as categorias ao  header categorias
+                    $("#header-categorias").append("<li value="+element.id+">"+element.name+ "</li>")
 
-                    //Adcionas as categorias ao 
                 });
             }
         });
@@ -257,7 +256,6 @@
                 const categories = card_solucao.categories;
                 
                 card_solucao.forEach(element => {
-                    console.log(element)
                     const categories = element.categories;
                     
                     //Novo array com os nomes das categorias
@@ -337,7 +335,7 @@
                 $.ajax({
                 method: "POST",
                 url: "{{ route('cardView') }}",
-                data: { cardId: cardId },
+                data: { id: cardId},
                 dataType: "json",
                 success: function(response) {
                     // Handle the success response
@@ -350,6 +348,9 @@
                 });
             });
         });
+
+    </script>
+    <script>
 
     </script>
 </body>
