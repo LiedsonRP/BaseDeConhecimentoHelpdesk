@@ -30,7 +30,7 @@ class SolutionSearchTool
      */
     public function getResult() : Collection
     {
-        $results = $this->builder->select()->distinct(["title"])->get()->pluck("solution_number");
+        $results = $this->builder->select()->distinct(["title"])->get()->pluck("solution_number")->sortDesc();
         
         $solutions = $results->map(function($id) {
             $solution = Solution::find($id)->load("categories");                
@@ -66,5 +66,15 @@ class SolutionSearchTool
     {        
         $title_param = $title."%";
         $this->builder->where("title", "LIKE", $title_param);         
+    }
+
+    /**
+     * Retorna uma solução cadastrada na base de dados junto de suas categorias e dados
+     * 
+     * @param int $id Número de identificação no banco de dados
+     */
+    public function getSingleSolution(int $id) : void
+    {
+        $this->builder->where("solution_number", $id);                
     }
 }

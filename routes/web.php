@@ -39,14 +39,17 @@ Route::prefix("/solucao")->group(function () {
          */
         Route::post("/cadastrar", "store")->name("cadSolucao");
         /**
-         * Rota que leva a função de retornar todos as soluções cadastradas no banco de dados
-         * @todo
+         * Rota que leva a função de retornar todos as soluções cadastradas no banco de dados         
          */
         Route::get("/solucoes", "searchSolutions")->name("mostrarSolucoes");
         /**
          * Rota que permite a edição do registro de uma categoria         
          */        
         Route::put("/edit/{id}", "update")->name("editarSolucao");
+        /**
+         * Redireciona para a página de edição da solução junto de seus dados
+         */
+        Route::get("/show-edit", "show")->name("cardView");
         /**
          * Rota que permite deletar uma solução         
          */
@@ -84,11 +87,7 @@ Route::prefix("/solucao")->group(function () {
      * 
      */
     Route::view("/dashboard", "pages/dashboard")->name("dashboard");
-    /**
-     * Rota que leva para a tela de edição da solução
-     *
-     */
-    Route::view("/card-solucao", "pages/edit_solution")->name("cardView");
+
 
 });
 
