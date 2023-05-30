@@ -52,6 +52,7 @@ class SolutionSearchTool
             $solution = new Solution([
                 "id" => $solution_record->solution_number,
                 "title" => $solution_record->title,
+                "solution_text" => $solution_record->solution_text,
                 "created_at" => $solution_record->created_at,
                 "updated_at" => $solution_record->updated_at,
             ]);                
