@@ -108,6 +108,22 @@ class SolutionController extends Controller
     }
 
     /**
+     * Redireciona para a view de edição se soluções
+     * @param Request $request
+     * @return Response
+     */
+    public function show(Request $request) 
+    {
+        if ($request->filled("id")) {
+            $this->searchTool->getSingleSolution($request->input("id"));
+            $solution = $this->searchTool->getResult()->last();
+            return response()->view("pages/edit_solution", ["solution"=>$solution]);
+        }
+
+        return back()->withInput()->withErrors("Não foi possível acessar a solução!");
+    }
+
+    /**
      * Modifica os dados de uma solução do sistema, podendo ser uma modificação de conteúdo, categoria ou título.
      * 
      * Caso a modificação seja bem sucedida ocorre o redirecionamento para a página principal, senão é retornado uma mensagem de erro

@@ -25,3 +25,4 @@ Route::delete("/delete/{id}", [SolutionController::class, "delete"]);
 Route::put("/edit/{id}", [SolutionController::class, "update"]);
 Route::post("/create-category", [CategoryController::class, "store"]);
 Route::delete("/del-category/{id}", [CategoryController::class, "delete"]);
+Route::get("/get-info", [SolutionController::class, "show"]);
