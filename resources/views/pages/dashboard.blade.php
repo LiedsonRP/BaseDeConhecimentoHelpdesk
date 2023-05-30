@@ -266,6 +266,8 @@
                     $(`.card_content_principal${element.id}`).append(`<div class="card-body" id="card-body-principal${element.id}"></div>`);
 
                    var card_content = `
+                   <form action="{{ route('cardView') }}" method="GET">
+                    <input name="id" value=${element.id} hidden>
                     <h5 class="card-title">${element.title}</h5>
                     <div class="updated_atualizated_solution">
                         <span>Criação: ${element.created_at}</span>
@@ -286,7 +288,7 @@
                             </li>
                         </ul>
 
-                    <button class="btn btn-primary button-edit">
+                    <button class="btn btn-primary button-edit" type="submit">
                         <img src="{{ asset('icons/editSolution.svg') }}" alt="editSolution">
                         Editar
                     </button>
@@ -294,6 +296,7 @@
                         <img src="{{ asset('icons/deleteSolution.svg') }}" alt="editSolution">
                         Deletar
                     </button>
+                    </form>
                     `;
                     
                     $(`#card-body-principal${element.id}`).append(card_content);
@@ -332,13 +335,14 @@
                 var cardId = $(this).closest('.card_content').attr('id');
                 console.log("ola mundo");
                 $.ajax({
-                method: "POST",
+                method: "GET",
                 url: "{{ route('cardView') }}",
                 data: { id: cardId},
                 dataType: "json",
                 success: function(response) {
                     // Handle the success response
                     alert("Deu certo")
+                    open('www.google.com')
                 },
                 error: function(xhr, status, error) {
                     // Handle the error response

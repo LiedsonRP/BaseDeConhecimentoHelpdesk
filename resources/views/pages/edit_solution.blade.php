@@ -31,8 +31,10 @@
                   <li class="breadcrumb-item active" aria-current="page">Editar</li>
                 </ol>
               </nav>
-
-            <textarea id="editor" name="editor"></textarea>
+              <h2>{{ $solution["title"] }}</h2>
+              <div>Criado em: {{ $solution["created_at"] }}</div>
+              <div>Atualizado em: {{ $solution["updated_at"] }}</div>
+            <textarea id="editor" name="editor">{{ $solution["text"] }}</textarea>
 
             <form class="form-jodit">
                 <div class="input-categoria">
@@ -118,5 +120,23 @@
           }
       });
   </script>
+  <script>
+    $.ajax({
+            type: "GET",
+            url: "{{ route('mostrarSolucoes') }}",
+            success: function(response) {
+
+                const card_solucao = response.data;
+                console.log(card_solucao)
+                
+                card_solucao.forEach(element => {                    
+                    const categories = element.categories;
+                    $("#editor").append(`<p>Teste</p>`);
+                  
+                });
+
+            }
+        });
+    </script>
 </body>
 </html>
