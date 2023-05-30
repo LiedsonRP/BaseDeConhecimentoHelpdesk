@@ -252,10 +252,8 @@
 
                 const card_solucao = response.data;
                 console.log(card_solucao)
-
-                const categories = card_solucao.categories;
                 
-                card_solucao.forEach(element => {
+                card_solucao.forEach(element => {                    
                     const categories = element.categories;
                     
                     //Novo array com os nomes das categorias
@@ -332,6 +330,7 @@
                 event.preventDefault();
                 // Get the card ID or any other data you need for the request
                 var cardId = $(this).closest('.card_content').attr('id');
+                console.log("ola mundo");
                 $.ajax({
                 method: "POST",
                 url: "{{ route('cardView') }}",
@@ -351,6 +350,42 @@
 
     </script>
     <script>
+        //live search por titulo
+        // JavaScript
+            $(function() {
+            $('#searchInput').keyup(function() {
+                var searchTerm = $(this).val();
+
+                $.ajax({
+                method: "GET",
+                url: "your-server-url",
+                data: { searchTerm: searchTerm },
+                dataType: "json",
+                success: function(response) {
+                    // Handle the success response
+                    displayResults(response);
+                },
+                error: function(xhr, status, error) {
+                    // Handle the error response
+                }
+                });
+            });
+
+            function displayResults(results) {
+                var $searchResults = $('#searchResults');
+                $searchResults.empty();
+
+                if (results.length > 0) {
+                $.each(results, function(index, result) {
+                    var $li = $('<li>').text(result);
+                    $searchResults.append($li);
+                });
+                } else {
+                var $li = $('<li>').text('No results found');
+                $searchResults.append($li);
+                }
+            }
+            });
 
     </script>
 </body>
