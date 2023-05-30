@@ -40,7 +40,7 @@ class Solution extends Model implements CategoryManager
     /**
      * @var array $fillable define quais campos o modelo permite ser preenchido.
      */
-    protected $fillable = ["title", "solution_text"];
+    protected $fillable = ["id", "title", "solution_text", "created_at", "updated_at"];
 
     /**
      * Configura o relacionamento de N para N entre soluções e categorias

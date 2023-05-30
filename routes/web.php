@@ -88,7 +88,6 @@ Route::prefix("/solucao")->group(function () {
      */
     Route::view("/dashboard", "pages/dashboard")->name("dashboard");
 
-
 });
 
 /**

@@ -57,14 +57,9 @@ class SolutionController extends Controller
             $this->searchTool->search_title($request->input("title"));
         }
 
-        $search_results = $this->searchTool->getResult();                
-        $paginated_items = new LengthAwarePaginator($search_results, $search_results->count(), 9);
-
-        return response([
-            "data" => $paginated_items->items(),
-            "current_page" => $paginated_items->currentPage(),
-            "last_page" => $paginated_items->lastPage()
-        ]);
+        $search_results = $this->searchTool->getResult(9);                        
+        
+        return response()->json($search_results);
     }
 
     /**
@@ -114,9 +109,8 @@ class SolutionController extends Controller
      */
     public function show(Request $request) 
     {
-        if ($request->filled("id")) {
-            $this->searchTool->getSingleSolution($request->input("id"));
-            $solution = $this->searchTool->getResult()->last();
+        if ($request->filled("id")) {            
+            $solution = $this->searchTool->getSingleSolution($request->input("id"));               
             return response()->view("pages/edit_solution", ["solution"=>$solution]);
         }
 
