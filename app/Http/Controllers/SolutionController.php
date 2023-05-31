@@ -130,7 +130,7 @@ class SolutionController extends Controller
     public function update(Request $request, int $id)
     {
 
-        if ($request->filled(["title", "solution_text"])) {
+        if ($request->filled(["title", "solution_text", "categories"])) {
             
             try {
 
@@ -147,7 +147,7 @@ class SolutionController extends Controller
                     $solution->remove_categories_existent_by_id($requestCategories);
                 });                
 
-                return $this->searchSolutions($request);
+                return redirect()->route("dashboard");
 
             } catch (ModelNotFoundException $ex) {
                 return back()->withInput()->withErrors("Categoria ou solução não encontrada!");

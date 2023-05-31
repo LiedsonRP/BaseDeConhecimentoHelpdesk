@@ -58,7 +58,14 @@ form.form-jodit{
     margin-right: 100px;
     height: 400px;
 }
-
+#title-solution{
+    font-size: 2em;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+.input_title_solution{
+    text-align: center;
+}
 @media screen and (max-width: 540px){
     form.form-jodit{
         gap: 30px;
